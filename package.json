@@ -1,0 +1,22 @@
+{
+  "name": "@rubick/rubick-core",
+  "version": "0.0.1",
+  "description": "rubick core api",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "cd ./test && node download.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubickCenter/rubick-core.git"
+  },
+  "author": "muwoo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rubickCenter/rubick-core/issues"
+  },
+  "homepage": "https://github.com/rubickCenter/rubick-core#readme",
+  "dependencies": {
+    "cross-spawn": "^7.0.3"
+  }
+}
