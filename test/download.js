@@ -1,4 +1,4 @@
-const rubickCore = require('../src/index');
+const rubickCore = require('../lib/index');
 const path = require('path');
 
 const pluginInstance = new rubickCore.PluginHandler({
@@ -7,5 +7,5 @@ const pluginInstance = new rubickCore.PluginHandler({
 
 console.log(path.join(__dirname, './plugin'));
 
-pluginInstance.uninstall(['rubick-plugin-demo'])
+pluginInstance.install(['rubick-plugin-demo'])
 // console.log(pluginInstance.pluginList)

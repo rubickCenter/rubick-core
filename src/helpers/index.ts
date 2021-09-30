@@ -1,8 +1,8 @@
-const fs = require('fs');
+import fs from 'fs';
 
-function existOrNot(path) {
-  return new Promise((resolve, reject) => {
-    fs.stat(path, async (err, stat) => {
+function existOrNot(path: string) {
+  return new Promise((resolve) => {
+    fs.stat(path, async (err) => {
       if (err) {
         resolve(false);
       } else {
