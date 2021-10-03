@@ -95,7 +95,8 @@ sysPluginHandler.rendererLoad()
 
 项目采用全自动化的代码检查与构建, 使用以下命令进行开发即可
 
-Action Command
-Install · npm install
-Build · npm run build
-Commit & Release · npm run ok
+| Action           | Command           |
+| ---------------- | ----------------- |
+| Install          | · `npm install`   |
+| Build            | · `npm run build` |
+| Commit & Release | · `npm run ok`    |
