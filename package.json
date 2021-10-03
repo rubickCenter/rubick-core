@@ -4,7 +4,6 @@
 	"description": "rubick core api",
 	"author": "muwoo",
 	"license": "ISC",
-	"packageManager": "pnpm@6.16.0",
 	"homepage": "https://github.com/rubickCenter/rubick-core#readme",
 	"repository": {
 		"type": "git",
@@ -30,7 +29,7 @@
 		"build": "tsup-node",
 		"start": "tsup-node --watch",
 		"test": "jest",
-		"ok": "pnpm commit && pnpm release",
+		"ok": "npm run commit && npm run release",
 		"commit": "git add . && gitmoji -c",
 		"release": "release-it",
 		"format": "prettier -w \"**/*.{ts,tsx,js,cjs,mjs}\" --ignore-path .gitignore"
