@@ -1,5 +1,8 @@
 .DS_Store
 Thumbs.db
 .idea
-./node_modules
+**/dist
+**/target
+**/node_modules
+**/.DS_Store
 ./test/plugin
