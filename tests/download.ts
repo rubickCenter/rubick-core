@@ -2,7 +2,7 @@ import { PluginHandler } from '../dist/index'
 import path from 'path'
 import fs from 'fs-extra'
 
-const pluginDic = path.join(__dirname, 'plugin')
+const pluginDic = path.join(__dirname, 'tmp')
 
 const pluginInstance = new PluginHandler({
 	baseDir: pluginDic,

@@ -1,5 +1,5 @@
-import spawn from 'cross-spawn'
 import { PluginHandlerImp, Plugins } from './PluginHandlerImp'
+import spawn from 'cross-spawn'
 import fs from 'fs-extra'
 
 class PluginHandler implements PluginHandlerImp {
