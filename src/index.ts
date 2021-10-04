@@ -1,1 +1,1 @@
-export { default as PluginHandler } from './plugin'
+export { default as PluginHandler } from './core'
