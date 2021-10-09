@@ -1,5 +1,1 @@
-const PluginHandler = require('./core/plugin');
-
-module.exports = {
-  PluginHandler
-}
+export { default as PluginHandler } from './core'
