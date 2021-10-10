@@ -13,6 +13,6 @@ test('Install Plugin', async () => {
 	console.log(pluginInstance.baseDir)
 	await pluginInstance.install(['rubick-plugin-demo'])
 	expect(typeof pluginInstance.pluginList['rubick-plugin-demo']).toBe('string')
-}, 10000)
+})
 
 fs.rmSync(pluginDic, { recursive: true, force: true })
