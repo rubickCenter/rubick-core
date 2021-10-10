@@ -4,8 +4,6 @@
 	"compilerOptions": {
 		"target": "ESNext",
 		"lib": ["ESNext", "DOM"],
-		"types": ["node"],
-		"typeRoots": ["node_modules/@types"],
 		"module": "nodenext",
 		"declaration": true,
 		"sourceMap": true,
