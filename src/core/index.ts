@@ -1,7 +1,2 @@
-import PluginHandler from './plugin';
-import {Localdb} from './db';
-
-export {
-  PluginHandler,
-  Localdb,
-}
+export { default as PluginHandler } from './plugin'
+export { Localdb } from './db'

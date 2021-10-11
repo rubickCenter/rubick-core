@@ -4,7 +4,6 @@ import { createRxDatabase, getRxStoragePouch, addPouchPlugin, RxDatabase } from 
 import adapter from 'pouchdb-adapter-leveldb'
 import path from 'path'
 import fs from 'fs-extra'
-import { DocOptions } from './syncdoc'
 import { LocalDocument } from './localdoc'
 import { SyncDocument } from './syncdoc'
 
@@ -54,8 +53,8 @@ export class RubickDB {
 	}
 
 	// 文档数据库 todo 单元测试
-	syncDoc(opt: DocOptions) {
-		return new SyncDocument(this.syncPersistence, opt)
+	syncDoc(name: string) {
+		return new SyncDocument(this.syncPersistence, name)
 	}
 
 	// 本地结构化数据库 todo 单元测试

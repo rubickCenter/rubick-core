@@ -2,10 +2,6 @@ import { LeveldbPersistence } from 'y-leveldb'
 import Y from 'yjs'
 import { CRDTMap, CRDTUtoolsArray } from './collections'
 
-export interface DocOptions {
-	name: string
-}
-
 /** 数据同步层
  * 数据同步层是一个分布式数据库, 使用基于 yjs 的 CRDT 算法处理数据一致性, 基于 hypercore-protocol 进行P2P通信同步[TODO], 可以看作是一个高效率(https://github.com/dmonad/crdt-benchmarks)的准区块链(节点可信的情况下)
  *
@@ -25,8 +21,7 @@ export class SyncDocument {
 	name: string
 	private doc!: Y.Doc
 	private syncPersistence: LeveldbPersistence
-	constructor(syncPersistence: LeveldbPersistence, opt: DocOptions) {
-		const { name } = opt
+	constructor(syncPersistence: LeveldbPersistence, name: string) {
 		this.name = name
 		this.syncPersistence = syncPersistence
 		this.getOrNewPersistenceDB()

@@ -1,20 +1,15 @@
 import Y from 'yjs'
-
-export interface UtoolsDBObject {
-	_id: string
-	data: any
-	_rev: string
-}
+import { Doc } from '../types'
 
 // todo 附件和键值存储
 export default class CRDTUtoolsArray {
-	private dbArray: Y.Array<UtoolsDBObject>
+	private dbArray: Y.Array<Doc>
 
 	constructor(ydoc: Y.Doc, arrayName: string) {
 		this.dbArray = ydoc.getArray(arrayName)
 	}
 
-	put(doc: UtoolsDBObject) {
+	put(doc: Doc) {
 		this.dbArray.forEach((v, i) => {
 			if (v._id === doc._id) {
 				this.dbArray.delete(i)
@@ -29,7 +24,7 @@ export default class CRDTUtoolsArray {
 	}
 
 	get(id: string) {
-		let res: UtoolsDBObject | undefined
+		let res: Doc | undefined
 		this.dbArray.forEach((v) => {
 			if (v._id === id) res = v
 		})
@@ -37,9 +32,9 @@ export default class CRDTUtoolsArray {
 	}
 
 	remove(id: string) {
-		let res: UtoolsDBObject = {
+		let res: Doc = {
 			_id: '',
-			data: undefined,
+			data: '',
 			_rev: '',
 		}
 		let index: number = -1
@@ -65,7 +60,7 @@ export default class CRDTUtoolsArray {
 		}
 	}
 
-	bulkDocs(docs: UtoolsDBObject[]) {
+	bulkDocs(docs: Doc[]) {
 		docs.forEach((doc) => {
 			this.dbArray.forEach((v, i) => {
 				if (v._id === doc._id) {
@@ -86,13 +81,13 @@ export default class CRDTUtoolsArray {
 		if (key === undefined) {
 			return this.dbArray.toArray()
 		} else if (typeof key === 'string') {
-			let res: UtoolsDBObject[] = []
+			let res: Doc[] = []
 			this.dbArray.forEach((v) => {
 				if (v._id.startsWith(key)) res.push(v)
 			})
 			return res
 		}
-		let res: UtoolsDBObject[] = []
+		let res: Doc[] = []
 		key.forEach((k) => {
 			this.dbArray.forEach((v) => {
 				if (v._id.startsWith(k)) res.push(v)
