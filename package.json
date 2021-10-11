@@ -24,6 +24,7 @@
 		"format": "prettier -w \"**/*.{ts,tsx,js,cjs,mjs}\" --ignore-path .gitignore"
 	},
 	"dependencies": {
+		"pouchdb": "^7.2.2",
 		"cross-spawn": "^7.0.3",
 		"fs-extra": "^10.0.0",
 		"got": "^11.8.2",
@@ -39,6 +40,7 @@
 		"@types/fs-extra": "^9.0.13",
 		"@types/jest": "^27.0.2",
 		"@types/node": "^16.10.3",
+		"@types/pouchdb": "^6.4.0",
 		"@types/pouchdb-adapter-leveldb": "^6.1.3",
 		"gitmoji-changelog": "^2.2.1",
 		"gitmoji-cli": "^4.7.0",

@@ -9,8 +9,7 @@ const pluginInstance = new PluginHandler({
 	registry: 'https://registry.npm.taobao.org',
 })
 
-test('Install Plugin', async () => {
-	console.log(pluginInstance.baseDir)
+test.skip('Install Plugin', async () => {
 	await pluginInstance.install(['rubick-plugin-demo'])
 	expect(typeof pluginInstance.pluginList['rubick-plugin-demo']).toBe('string')
 })
