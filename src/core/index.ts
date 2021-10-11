@@ -1,2 +1,5 @@
 export { default as PluginHandler } from './plugin'
 export { Localdb } from './db'
+export { fs } from './fs'
+export { path } from './path'
+export { request } from './net'

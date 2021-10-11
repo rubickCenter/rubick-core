@@ -1,4 +1,4 @@
-import { PluginHandler } from '../dist/index'
+import { PluginHandler } from '../src'
 import path from 'path'
 import fs from 'fs-extra'
 
