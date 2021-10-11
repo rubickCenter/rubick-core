@@ -31,7 +31,7 @@ const getPersistence = async (DATABASE_STORE_PATH: string) => {
 	return { syncPersistence, localPersistence }
 }
 
-export default class RubickDB {
+export class RubickDB {
 	private DATABASE_STORE_PATH: string
 	private syncPersistence!: LeveldbPersistence
 	private localPersistence!: RxDatabase
@@ -55,3 +55,5 @@ export default class RubickDB {
 		return new LocalDocument(this.localPersistence, opt)
 	}
 }
+
+export { Localdb } from './localdb';

@@ -14,4 +14,6 @@ interface DocOptions {
 	name: string
 }
 
-export { BaseDocument, type DocOptions }
+export {BaseDocument}
+export type { DocOptions }
+
