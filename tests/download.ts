@@ -12,6 +12,6 @@ const pluginInstance = new PluginHandler({
 test.skip('Install Plugin', async () => {
 	await pluginInstance.install(['rubick-plugin-demo'])
 	expect(typeof pluginInstance.pluginList['rubick-plugin-demo']).toBe('string')
-}, 10000)
+})
 
 fs.rmSync(pluginDic, { recursive: true, force: true })

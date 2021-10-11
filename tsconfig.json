@@ -4,10 +4,11 @@
 	"compilerOptions": {
 		"target": "ESNext",
 		"lib": ["ESNext", "DOM"],
-		"module": "CommonJS",
+		"module": "nodenext",
 		"declaration": true,
 		"sourceMap": true,
 		"outDir": "dist",
+		"skipLibCheck": true,
 		"isolatedModules": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,

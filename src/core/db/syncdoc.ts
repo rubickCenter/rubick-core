@@ -1,6 +1,7 @@
+import { LeveldbPersistence } from 'y-leveldb'
 import Y from 'yjs'
-import { CRDTMap } from './map'
-import { RubickDB, syncPersistence } from './utils'
+import { CRDTMap } from './collections/map'
+import { BaseDocument, DocOptions } from './utils'
 
 /** 数据同步层
  * 数据同步层是一个分布式数据库, 使用基于 yjs 的 CRDT 算法处理数据一致性, 基于 hypercore-protocol 进行P2P通信同步[TODO], 可以看作是一个高效率(https://github.com/dmonad/crdt-benchmarks)的准区块链(节点可信的情况下)
@@ -16,20 +17,22 @@ import { RubickDB, syncPersistence } from './utils'
  * > 数据历史的增加会导致每份数据越来越庞大 ( 可通过中心服务器定期的垃圾回收解决 )
  *
  */
-export class SyncDB extends RubickDB {
+export class SyncDocument extends BaseDocument {
 	private doc!: Y.Doc
-	constructor(opt: { name: string }) {
+	private syncPersistence: LeveldbPersistence
+	constructor(syncPersistence: LeveldbPersistence, opt: DocOptions) {
 		super(opt)
+		this.syncPersistence = syncPersistence
 		this.getOrNewPersistenceDB()
 	}
 
 	private async getOrNewPersistenceDB() {
-		this.doc = await syncPersistence.getYDoc(this.name)
+		this.doc = await this.syncPersistence.getYDoc(this.name)
 	}
 
 	// 数据在同步层内只会在内存中改动, 持久化需调用 updatePersistence 进行保存
 	updatePersistence() {
-		return syncPersistence.storeUpdate(this.name, Y.encodeStateAsUpdateV2(this.doc))
+		return this.syncPersistence.storeUpdate(this.name, Y.encodeStateAsUpdateV2(this.doc))
 	}
 
 	// 退出的时候数据持久化
