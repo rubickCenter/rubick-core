@@ -4,7 +4,7 @@ import { createRxDatabase, getRxStoragePouch, addPouchPlugin, RxDatabase } from 
 import adapter from 'pouchdb-adapter-leveldb'
 import path from 'path'
 import fs from 'fs-extra'
-import { DocOptions } from './utils'
+import { DocOptions } from './syncdoc'
 import { LocalDocument } from './localdoc'
 import { SyncDocument } from './syncdoc'
 
@@ -31,6 +31,12 @@ const getPersistence = async (DATABASE_STORE_PATH: string) => {
 	return { syncPersistence, localPersistence }
 }
 
+/** RubickDB 离线数据库
+ *
+ * @DATABASE_STORE_PATH 数据储存路径
+ * @export
+ * @class RubickDB
+ */
 export default class RubickDB {
 	private DATABASE_STORE_PATH: string
 	private syncPersistence!: LeveldbPersistence
@@ -47,11 +53,13 @@ export default class RubickDB {
 		this.localPersistence = localPersistence
 	}
 
-	newSyncDoc(opt: DocOptions) {
+	// 文档数据库 todo 单元测试
+	syncDoc(opt: DocOptions) {
 		return new SyncDocument(this.syncPersistence, opt)
 	}
 
-	newLocalDoc(opt: DocOptions) {
-		return new LocalDocument(this.localPersistence, opt)
+	// 本地结构化数据库 todo 单元测试
+	localDoc() {
+		return new LocalDocument(this.localPersistence)
 	}
 }

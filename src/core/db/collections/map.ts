@@ -1,6 +1,6 @@
 import Y from 'yjs'
 
-export class CRDTMap {
+export default class CRDTMap {
 	private dbMap: Y.Map<any>
 
 	constructor(ydoc: Y.Doc, mapName: string) {
