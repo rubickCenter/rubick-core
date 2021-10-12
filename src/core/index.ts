@@ -1,7 +1,5 @@
-export { PluginHandler } from './plugin'
-export { Localdb } from './db'
-export { SyncDB } from './p2p'
+import PluginHandler from './plugin'
+import { Localdb } from './db'
+import { SyncDB } from './p2p'
 
-export { fs } from './fs'
-export { path } from './path'
-export { request } from './net'
+export { PluginHandler, Localdb, SyncDB }
