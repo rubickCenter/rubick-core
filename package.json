@@ -31,7 +31,6 @@
     "yjs": "^13.5.13"
   },
   "devDependencies": {
-    "@types/cross-spawn": "^6.0.2",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.10.3",
