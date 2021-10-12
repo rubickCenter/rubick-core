@@ -1,4 +1,4 @@
-type RevisionId = string;
+type RevisionId = string
 
 export interface Doc {
   _id: string

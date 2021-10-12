@@ -1,1 +1,1 @@
-export { Localdb } from './localdb';
+export { Localdb } from './localdb'
