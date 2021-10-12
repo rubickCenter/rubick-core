@@ -1,45 +1,42 @@
-import { Localdb } from '../dist';
-import path from 'path';
+import { Localdb } from '../src/core'
+import path from 'path'
 
-const dbPath = path.join(__dirname, 'tmp');
+const dbPath = path.join(__dirname, 'tmp')
 
-const db =  new Localdb(dbPath);
+const db = new Localdb(dbPath)
 
-db.init();
+db.init()
 
 describe('db', () => {
-  test('put', async () => {
-    const id = Date.now();
-    const result = await db.put('test', {
-      _id: `demo_${id}`,
-      data: "demo"
-    });
-    if ("id" in result) {
-      expect(result.id).toBe(`demo_${id}`);
-    }
-  });
+	test('put', async () => {
+		const id = Date.now()
+		const result = await db.put('test', {
+			_id: `demo_${id}`,
+			data: 'demo',
+		})
+		if ('id' in result) {
+			expect(result.id).toBe(`demo_${id}`)
+		}
+	})
 
-  test('update', async () => {
-    const id = Date.now();
+	test('update', async () => {
+		const id = Date.now()
 
-    const result = await db.put('test', {
-      _id: `demo_${id}`,
-      data: "demo"
-    });
+		const result = await db.put('test', {
+			_id: `demo_${id}`,
+			data: 'demo',
+		})
 
-    await db.put('test',{
-      _id: `demo_${id}`,
-      data: "demo update",
-      // @ts-ignore
-      _rev: result.rev,
-    });
+		await db.put('test', {
+			_id: `demo_${id}`,
+			data: 'demo update',
+			// @ts-ignore
+			_rev: result.rev,
+		})
 
-    const target = await db.get('test', `demo_${id}`);
+		const target = await db.get('test', `demo_${id}`)
 
-    // @ts-ignore
-    expect(target.data).toBe('demo update')
-  })
-
-});
-
-
+		// @ts-ignore
+		expect(target.data).toBe('demo update')
+	})
+})

@@ -3,5 +3,5 @@ import { Localdb } from './db';
 
 export {
   PluginHandler,
-  Localdb
+  Localdb,
 };
