@@ -1,4 +1,4 @@
-import { Localdb } from '../src'
+import { Localdb } from '../src/core'
 import path from 'path'
 
 const dbPath = path.join(__dirname, 'tmp')

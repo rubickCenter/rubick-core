@@ -1,11 +1,11 @@
-import Y from 'yjs'
+import { Doc as YDoc, Array as YArray } from 'yjs'
 import { Doc } from '../../db/types'
 
 // todo 附件和键值存储
 export default class CRDTUtoolsArray {
-	private dbArray: Y.Array<Doc>
+	private dbArray: YArray<Doc>
 
-	constructor(ydoc: Y.Doc, arrayName: string) {
+	constructor(ydoc: YDoc, arrayName: string) {
 		this.dbArray = ydoc.getArray(arrayName)
 	}
 

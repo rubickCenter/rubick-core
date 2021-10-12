@@ -1,4 +1,4 @@
-import Y from 'yjs'
+import { Doc as YDoc } from 'yjs'
 import CRDTMap from './map'
 import CRDTUtoolsArray from './utoolsarray'
 
@@ -17,21 +17,22 @@ import CRDTUtoolsArray from './utoolsarray'
  *
  * [todo] 以 collection 为粒度跨设备同步，可选择开关
  */
-export class SyncDocument {
+export class SyncDB {
 	name: string
-	private doc!: Y.Doc
 	constructor(name: string) {
 		this.name = name
 	}
 
 	// collections
 	// 兼容 utools API 的 Array
-	newUtoolsArray(name: string) {
-		return new CRDTUtoolsArray(this.doc, name)
+	newUtoolsArray(name: string, doc?: YDoc) {
+		doc = doc || new YDoc()
+		return new CRDTUtoolsArray(doc, name)
 	}
 
 	// Map
-	newMap(name: string) {
-		return new CRDTMap(this.doc, name)
+	newMap(name: string, doc?: YDoc) {
+		doc = doc || new YDoc()
+		return new CRDTMap(doc, name)
 	}
 }

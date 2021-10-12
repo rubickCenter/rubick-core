@@ -59,4 +59,4 @@ class PluginHandler implements PluginHandlerImp {
 	}
 }
 
-export default PluginHandler
+export { PluginHandler }

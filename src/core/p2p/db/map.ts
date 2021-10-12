@@ -1,16 +1,16 @@
-import Y from 'yjs'
+import { Doc, Map as YMap, Transaction, YEvent } from 'yjs'
 
-export default class CRDTMap {
-	private dbMap: Y.Map<any>
+export default class CRDTMap<T> {
+	private dbMap: YMap<T>
 
-	constructor(ydoc: Y.Doc, mapName: string) {
+	constructor(ydoc: Doc, mapName: string) {
 		this.dbMap = ydoc.getMap(mapName)
 	}
 
 	// load json (batch update)
 	fromJSON(json: object | string) {
 		json = typeof json === 'string' ? JSON.parse(json) : json
-		const dataMap = new Map(Object.entries(json))
+		const dataMap = new Map<string, any>(Object.entries(json))
 		dataMap.forEach((k) => {
 			this.dbMap.set(k, dataMap.get(k))
 		})
@@ -63,7 +63,7 @@ export default class CRDTMap {
 
 	// 监听数据变动当数据从其他设备同步时调用 hook , 返回取消调用的函数
 	get observe() {
-		return (hook: (event: Y.YEvent, transaction: Y.Transaction) => void) => {
+		return (hook: (event: YEvent, transaction: Transaction) => void) => {
 			this.dbMap.observe(hook)
 			return () => this.dbMap.unobserve(hook)
 		}
@@ -71,7 +71,7 @@ export default class CRDTMap {
 
 	// 递归深度监听数据变动
 	get observeDeep() {
-		return (hook: (event: Y.YEvent[], transaction: Y.Transaction) => void) => {
+		return (hook: (event: YEvent[], transaction: Transaction) => void) => {
 			this.dbMap.observeDeep(hook)
 			return () => this.dbMap.unobserveDeep(hook)
 		}

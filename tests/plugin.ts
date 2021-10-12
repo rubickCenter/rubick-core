@@ -1,4 +1,4 @@
-import { PluginHandler } from '../src'
+import { PluginHandler } from '../src/core'
 import path from 'path'
 import fs from 'fs-extra'
 
