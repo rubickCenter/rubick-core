@@ -1,5 +1,9 @@
 import { Localdb } from '../src/core'
 import path from 'path'
+import fs from 'fs-extra'
+if (!fs.pathExistsSync(path.join(__dirname, 'tmp'))) {
+  fs.mkdirSync(path.join(__dirname, 'tmp'))
+}
 
 const dbPath = path.join(__dirname, 'tmp', 'db')
 
