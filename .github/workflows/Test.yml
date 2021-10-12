@@ -1,34 +1,35 @@
 name: Test CI
 
 on:
-    push:
-        branches:
-            - master
-    pull_request:
-        branches:
-            - master
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
-    Test:
-        strategy:
-            matrix:
-                platform: [ubuntu-latest]
-                node-version: [16.x]
-        runs-on: ${{ matrix.platform }}
-        steps:
-            - uses: actions/checkout@v2
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v2.4.1
-              with:
-                  node-version: ${{ matrix.node-version }}
+  Test:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest]
+        node-version: [16.x]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.4.1
+        with:
+          node-version: ${{ matrix.node-version }}
 
-            - name: NPM Cache
-              uses: actions/cache@v2.1.6
-              with:
-                  path: node_modules
-                  key: ${{ matrix.platform }}-${{ hashFiles('**/package.json') }}
-                  restore-keys: |
-                      ${{ matrix.platform }}-
+      - name: NPM Cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: node_modules
+          key: ${{ matrix.platform }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ matrix.platform }}-
 
-            - run: npm install pnpm -g && pnpm i && pnpm build
-            - run: pnpm test
+      - run: npm install pnpm -g && pnpm i && pnpm build
+      - run: pnpm lint
+      - run: pnpm test
