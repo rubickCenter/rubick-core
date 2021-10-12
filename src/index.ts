@@ -1,1 +1,1 @@
-export { PluginHandler, Localdb } from './core'
+export { PluginHandler, Localdb } from './core';
