@@ -3,7 +3,7 @@ import { Doc } from '../../db/types'
 
 // todo 附件和键值存储
 export default class CRDTUtoolsArray {
-  private dbArray: YArray<Doc>
+  private readonly dbArray: YArray<Doc>
 
   constructor(ydoc: YDoc, arrayName: string) {
     this.dbArray = ydoc.getArray(arrayName)

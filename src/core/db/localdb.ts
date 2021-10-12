@@ -20,7 +20,7 @@ export class Localdb {
     this.docMaxByteLength = SINGLE_DOC_MAX_SIZE // 2M
     this.docAttachmentMaxByteLength = SINGLE_ATTACHMENT_MAX_SIZE // 20M
     this.dbpath = dbPath
-    this.defaultDbName = path.join(dbPath, dbName || 'rubick')
+    this.defaultDbName = path.join(dbPath, dbName ?? 'rubick')
     this.init()
   }
 
@@ -121,7 +121,7 @@ export class Localdb {
       if (!Array.isArray(docs)) {
         return this.errorInfo('exception', 'docs must be a array')
       }
-      if (docs.find((doc: Doc) => !doc._id)) {
+      if (docs.find((doc: Doc) => !doc._id) != null) {
         return this.errorInfo('exception', 'doc not _id field')
       }
       // repeat error

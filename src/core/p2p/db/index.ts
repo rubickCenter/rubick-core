@@ -26,13 +26,13 @@ export class SyncDB {
   // collections
   // 兼容 utools API 的 Array
   newUtoolsArray(name: string, doc?: YDoc) {
-    doc = doc || new YDoc()
+    doc = doc ?? new YDoc()
     return new CRDTUtoolsArray(doc, name)
   }
 
   // Map
   newMap(name: string, doc?: YDoc) {
-    doc = doc || new YDoc()
+    doc = doc ?? new YDoc()
     return new CRDTMap(doc, name)
   }
 }

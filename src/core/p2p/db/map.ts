@@ -1,10 +1,10 @@
 import { Doc, Map as YMap, Transaction, YEvent } from 'yjs'
 
 export default class CRDTMap<T> {
-  private dbMap: YMap<T>
+  private readonly dbMap: YMap<T>
 
   constructor(ydoc: Doc, mapName: string) {
-    this.dbMap = ydoc?.getMap(mapName)
+    this.dbMap = ydoc.getMap(mapName)
   }
 
   // load json (batch update)
