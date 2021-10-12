@@ -1,5 +1,5 @@
 import Y from 'yjs'
-import { Doc } from '../types'
+import { Doc } from '../../db/types'
 
 // todo 附件和键值存储
 export default class CRDTUtoolsArray {

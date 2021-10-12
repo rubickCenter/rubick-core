@@ -15,8 +15,9 @@ const pluginSchema = {
 			type: 'boolean',
 			default: false,
 		},
-		data: {
-			type: 'string',
+		sync: {
+			type: 'boolean',
+			default: false,
 		},
 	},
 	required: ['uuid', 'name'],
