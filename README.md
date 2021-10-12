@@ -6,7 +6,7 @@
 const { PluginHandler } = require('@rubick/rubick-core')
 
 const pluginInstance = new PluginHandler({
-	baseDir: path.join(__dirname, './plugin'),
+  baseDir: path.join(__dirname, './plugin')
 })
 ```
 

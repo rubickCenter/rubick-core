@@ -3,4 +3,8 @@ export interface PluginHandlerImp {
   registry: string
 }
 
-export type Plugins = string[];
+export interface PluginDependencies {
+  [name: string]: string
+}
+
+export type Plugins = string[]
