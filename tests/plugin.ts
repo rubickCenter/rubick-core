@@ -11,9 +11,15 @@ const pluginInstance = new PluginHandler({
   registry: 'https://registry.npm.taobao.org'
 })
 
+test('Search Plugin', async () => {
+  await pluginInstance.search('rubick-plugin-demo', r => {
+    expect(r.name).toBe('rubick-plugin-demo')
+  })
+}, 10000)
+
 test('Install Plugin', async () => {
   await pluginInstance.install(['rubick-plugin-demo'])
-  expect(typeof (await pluginInstance.pluginList)).toBe('object')
+  expect(typeof pluginInstance.pluginList['rubick-plugin-demo']).toBe('string')
 })
 
 fs.rmSync(pluginDic, { recursive: true, force: true })
