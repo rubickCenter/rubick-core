@@ -7,4 +7,3 @@ Thumbs.db
 **/.DS_Store
 ./test/plugin
 tests/tmp
-**/pnpm-lock.yaml

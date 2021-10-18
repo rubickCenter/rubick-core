@@ -26,9 +26,9 @@ jobs:
         uses: actions/cache@v2.1.6
         with:
           path: node_modules
-          key: ${{ matrix.platform }}-${{ hashFiles('**/package.json') }}
+          key: ${{ matrix.platform }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ matrix.platform }}-
 
-      - run: npm install yarn && yarn build
-      - run: yarn lint &&  yarn test
+      - run: npm install && npm run build
+      - run: npm run lint &&  npm run test
