@@ -41,12 +41,9 @@ class PluginHandler implements PluginHandlerImp {
   }
 
   async execCommand(cmd: string, modules: string[]): Promise<string> {
-    let args: string[] = [cmd]
-      .concat(modules)
-      .concat('--color=always')
-      .concat('--save')
+    let args: string[] = [cmd].concat(modules).concat('--color=always')
     args = args.concat(`--registry=${this.registry}`)
-    const { stdout } = await execa('pnpm', args, {
+    const { stdout } = await execa('npm exec pnpm', args, {
       cwd: this.baseDir
     })
     return stdout

@@ -30,6 +30,5 @@ jobs:
           restore-keys: |
             ${{ matrix.platform }}-
 
-      - run: npm install pnpm -g && pnpm i && pnpm build
-      - run: pnpm lint
-      - run: pnpm test
+      - run: npm install && npm run build
+      - run: npm run lint &&  npm run test
