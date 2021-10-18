@@ -21,7 +21,7 @@
     "ok": "npm run commit && npm run release",
     "commit": "git add . && gitmoji -c",
     "release": "release-it",
-    "lint": "eslint src --fix --ext .ts,.js "
+    "lint": "eslint src --fix --ext .ts,.js,.cjs,.mjs "
   },
   "dependencies": {
     "execa": "^5.1.1",
