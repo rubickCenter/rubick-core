@@ -22,13 +22,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # - name: NPM Cache
-      #   uses: actions/cache@v2.1.6
-      #   with:
-      #     path: node_modules
-      #     key: ${{ matrix.platform }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      #     restore-keys: |
-      #       ${{ matrix.platform }}-
+      - name: NPM Cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: node_modules
+          key: ${{ matrix.platform }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ matrix.platform }}-
 
-      - run: npm install && npm run build
-      - run: npm run lint &&  npm run test
+      - run: npm install pnpm -g && pnpm i && pnpm build
+      - run: pnpm lint
+      - run: pnpm test

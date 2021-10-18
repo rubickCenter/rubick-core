@@ -5,6 +5,7 @@ import {
 } from './PluginHandlerImp'
 import execa from 'execa'
 import fs from 'fs-extra'
+import path from 'path'
 
 class PluginHandler implements PluginHandlerImp {
   public baseDir: string
@@ -43,9 +44,13 @@ class PluginHandler implements PluginHandlerImp {
   async execCommand(cmd: string, modules: string[]): Promise<string> {
     let args: string[] = [cmd].concat(modules).concat('--color=always')
     args = args.concat(`--registry=${this.registry}`)
-    const { stdout } = await execa('npm exec pnpm', args, {
-      cwd: this.baseDir
-    })
+    const { stdout } = await execa(
+      path.resolve('node_modules/.bin/pnpm'),
+      args,
+      {
+        cwd: this.baseDir
+      }
+    )
     return stdout
   }
 }
