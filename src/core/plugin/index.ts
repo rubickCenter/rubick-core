@@ -21,15 +21,15 @@ class PluginHandler implements PluginHandlerImp {
       fs.mkdirSync(this.baseDir)
       fs.writeFileSync(pkgFilePath, '{}')
     }
-    await this.execCommand('install', plugins)
+    await this.execCommand('add', plugins)
   }
 
   async update(plugins: Plugins): Promise<void> {
-    await this.execCommand('install', plugins)
+    await this.execCommand('update', plugins)
   }
 
   async uninstall(plugins: Plugins): Promise<void> {
-    await this.execCommand('uninstall', plugins)
+    await this.execCommand('remove', plugins)
   }
 
   get pluginList(): Promise<PluginDependencies> {
@@ -46,8 +46,9 @@ class PluginHandler implements PluginHandlerImp {
       .concat('--color=always')
       .concat('--save')
     args = args.concat(`--registry=${this.registry}`)
-
-    const { stdout } = await execa('npm', args, { cwd: this.baseDir })
+    const { stdout } = await execa('pnpm', args, {
+      cwd: this.baseDir
+    })
     return stdout
   }
 }
