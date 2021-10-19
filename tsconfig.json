@@ -1,6 +1,6 @@
 {
-  "include": ["packages/**/*"],
-  "exclude": ["**/example", "**/node_modules", "**/dist"],
+  "include": ["packages"],
+  "exclude": ["**/example", "**/node_modules", "**/dist", "**/test"],
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["ESNext", "DOM"],

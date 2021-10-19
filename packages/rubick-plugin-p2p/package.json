@@ -2,8 +2,10 @@
   "name": "@rubick/rubick-plugin-p2p",
   "version": "0.0.2-21",
   "description": "rubick core api",
-  "author": "muwoo",
-  "license": "ISC",
+  "author": "sovlookup",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "homepage": "https://github.com/rubickCenter/rubick-core#readme",
   "repository": {
     "type": "git",
@@ -12,10 +14,8 @@
   "bugs": {
     "url": "https://github.com/rubickCenter/rubick-core/issues"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "scripts": {
-    "prepack": "bob-esbuild build",
+    "prepack": "bob-esbuild build --clean",
     "test": "jest",
     "ok": "npm run commit && npm run release",
     "commit": "git add . && gitmoji -c",

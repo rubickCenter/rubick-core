@@ -2,8 +2,8 @@
   "name": "rubick-core",
   "version": "0.0.2-21",
   "description": "rubick core api",
-  "author": "muwoo",
-  "license": "ISC",
+  "author": "rubick",
+  "license": "",
   "homepage": "https://github.com/rubickCenter/rubick-core#readme",
   "repository": {
     "type": "git",
@@ -12,8 +12,6 @@
   "bugs": {
     "url": "https://github.com/rubickCenter/rubick-core/issues"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "scripts": {
     "build": "bob-esbuild tsc && pnpm prepack -r",
     "watch": "tsc --watch",

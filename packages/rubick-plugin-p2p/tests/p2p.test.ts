@@ -1,4 +1,4 @@
-import { SyncDB } from '../src/core'
+import { SyncDB } from '../src'
 
 const db = new SyncDB('testdoc')
 const map = db.newMap('testmap')

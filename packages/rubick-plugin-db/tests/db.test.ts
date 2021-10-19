@@ -1,11 +1,7 @@
-import { Localdb } from '../packages/core'
+import { Localdb } from '../src'
 import path from 'path'
-import fs from 'fs-extra'
-if (!fs.pathExistsSync(path.join(__dirname, 'tmp'))) {
-  fs.mkdirSync(path.join(__dirname, 'tmp'))
-}
 
-const dbPath = path.join(__dirname, 'tmp', 'db')
+const dbPath = path.join(__dirname, 'tmp')
 
 const db = new Localdb(dbPath)
 

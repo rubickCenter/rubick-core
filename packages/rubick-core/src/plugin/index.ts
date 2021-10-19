@@ -1,9 +1,9 @@
 import { PluginHandlerImp, Plugins } from './PluginHandlerImp'
 import execa from 'execa'
 import fs from 'fs-extra'
-import path from 'path'
 import search, { Result } from 'libnpmsearch'
 import { IPackageJson, IDependency } from '@ts-type/package-dts/package-json'
+import path from 'path'
 
 class PluginHandler implements PluginHandlerImp {
   public baseDir: string
@@ -60,7 +60,7 @@ class PluginHandler implements PluginHandlerImp {
     let args: string[] = [cmd].concat(modules).concat('--color=always')
     args = args.concat(`--registry=${this.registry}`)
     const { stdout } = await execa(
-      path.resolve('node_modules/.bin/pnpm'),
+      path.resolve(__dirname, '../../node_modules/.bin/pnpm'),
       args,
       {
         cwd: this.baseDir

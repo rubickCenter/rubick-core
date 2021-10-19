@@ -1,10 +1,8 @@
-import { PluginHandler } from '../src/core'
+import { PluginHandler } from '../src'
 import path from 'path'
 import fs from 'fs-extra'
-if (!fs.pathExistsSync(path.join(__dirname, 'tmp'))) {
-  fs.mkdirSync(path.join(__dirname, 'tmp'))
-}
-const pluginDic = path.join(__dirname, 'tmp', 'plugin')
+
+const pluginDic = path.join(__dirname, 'tmp')
 
 const pluginInstance = new PluginHandler({
   baseDir: pluginDic,
