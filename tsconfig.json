@@ -1,9 +1,10 @@
 {
-  "include": ["src/**/*"],
+  "include": ["packages/**/*"],
   "exclude": ["**/example", "**/node_modules", "**/dist"],
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["ESNext", "DOM"],
+    "rootDir": ".",
     "module": "commonjs",
     "declaration": true,
     "sourceMap": true,

@@ -1,0 +1,31 @@
+{
+  "name": "@rubick/rubick-plugin-p2p",
+  "version": "0.0.2-21",
+  "description": "rubick core api",
+  "author": "muwoo",
+  "license": "ISC",
+  "homepage": "https://github.com/rubickCenter/rubick-core#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubickCenter/rubick-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rubickCenter/rubick-core/issues"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepack": "bob-esbuild build",
+    "test": "jest",
+    "ok": "npm run commit && npm run release",
+    "commit": "git add . && gitmoji -c",
+    "release": "release-it",
+    "lint": "eslint src --fix --ext .ts,.js,.cjs,.mjs "
+  },
+  "dependencies": {
+    "yjs": "^13.5.16"
+  },
+  "files": [
+    "dist"
+  ]
+}

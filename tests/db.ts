@@ -1,4 +1,4 @@
-import { Localdb } from '../src/core'
+import { Localdb } from '../packages/core'
 import path from 'path'
 import fs from 'fs-extra'
 if (!fs.pathExistsSync(path.join(__dirname, 'tmp'))) {

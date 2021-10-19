@@ -5,7 +5,7 @@ import PouchDB from 'pouchdb'
 import {
   SINGLE_ATTACHMENT_MAX_SIZE,
   SINGLE_DOC_MAX_SIZE
-} from '../../helpers/constans'
+} from './helpers/constans'
 
 import { Doc, DocRes, DBError, AllDocsOptions } from './types'
 

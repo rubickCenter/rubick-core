@@ -1,5 +1,11 @@
 import { Doc as YDoc, Array as YArray } from 'yjs'
-import { Doc } from '../../db/types'
+
+interface Doc {
+  _id: string
+  data: string
+  _rev?: string
+  _attachments?: string
+}
 
 // todo 附件和键值存储
 export default class CRDTUtoolsArray {
