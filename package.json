@@ -22,6 +22,7 @@
     "lint": "eslint packages --fix --ext .ts,.js,.cjs,.mjs "
   },
   "devDependencies": {
+    "@release-it/bumper": "^3.0.1",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.1",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
@@ -46,6 +47,16 @@
   "release-it": {
     "npm": {
       "publish": false
+    },
+    "plugins": {
+      "@release-it/bumper": {
+        "in": "package.json",
+        "out": [
+          "packages/rubick-core/package.json",
+          "packages/rubick-plugin-db/package.json",
+          "packages/rubick-plugin-p2p/package.json"
+        ]
+      }
     },
     "hooks": {
       "before:git:commit": "npm run lint"
