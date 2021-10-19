@@ -6,7 +6,7 @@ const pluginDic = path.join(__dirname, 'tmp')
 
 const pluginInstance = new PluginHandler({
   baseDir: pluginDic,
-  registry: 'https://registry.npm.taobao.org'
+  registry: 'https://registry.npmjs.org/'
 })
 
 test('Search Plugin', async () => {
