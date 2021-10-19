@@ -27,7 +27,7 @@ class PluginHandler implements PluginHandlerImp {
   async search(plugin: string, streamFunc?: (data: Result) => void) {
     return new Promise<Result[]>((resolve, reject) => {
       const result: Result[] = []
-      const stream = search.stream(plugin,{ registry: this.registry })
+      const stream = search.stream(plugin)
       stream.on('data', (data: Result) => {
         result.push(data)
         if (streamFunc !== undefined) streamFunc(data)
