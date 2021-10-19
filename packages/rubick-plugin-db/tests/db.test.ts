@@ -14,7 +14,7 @@ describe('db', () => {
       _id: `demo_${id}`,
       data: 'demo'
     })
-    // @ts-ignore
+    // @ts-expect-error test
     if ('id' in result) {
       expect(result.id).toBe(`demo_${id}`)
     }
@@ -31,13 +31,13 @@ describe('db', () => {
     await db.put('test', {
       _id: `demo_${id}`,
       data: 'demo update',
-      // @ts-ignore
+      // @ts-expect-error test
       _rev: result.rev
     })
 
     const target = await db.get('test', `demo_${id}`)
 
-    // @ts-ignore
+    // @ts-expect-error test
     expect(target.data).toBe('demo update')
   })
 })

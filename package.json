@@ -19,7 +19,7 @@
     "ok": "npm run commit && npm run release",
     "commit": "git add . && gitmoji -c",
     "release": "release-it",
-    "lint": "eslint packages --fix --ext .ts,.js,.cjs,.mjs "
+    "lint": "eslint packages --fix --ext .ts,.js,.cjs,.mjs --ignore-path .gitignore"
   },
   "devDependencies": {
     "@release-it/bumper": "^3.0.1",
