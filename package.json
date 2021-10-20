@@ -13,7 +13,7 @@
     "url": "https://github.com/rubickCenter/rubick-core/issues"
   },
   "scripts": {
-    "build": "pnpm prepack -r",
+    "build": "bob-esbuild tsc && pnpm prepack -r",
     "watch": "tsc --watch",
     "test": "jest",
     "ok": "npm run commit && npm run release",
