@@ -1,6 +1,9 @@
 import path from 'path'
 import fs from 'fs-extra'
 import PouchDB from 'pouchdb'
+import rocksdb from 'pouchdb-adapter-rocksdb2'
+
+PouchDB.plugin(rocksdb)
 
 import {
   SINGLE_ATTACHMENT_MAX_SIZE,
@@ -26,7 +29,8 @@ export default class Localdb<T> {
   async start() {
     if (!(await fs.pathExists(this.dbpath))) await fs.mkdirs(this.dbpath)
     this.pouchDB = new PouchDB(this.defaultDbName, {
-      auto_compaction: true
+      auto_compaction: true,
+      adapter: 'rocksdb'
     })
   }
 

@@ -23,7 +23,8 @@
     "lint": "eslint src --fix --ext .ts,.js,.cjs,.mjs "
   },
   "dependencies": {
-    "pouchdb": "^7.2.2"
+    "pouchdb": "^7.2.2",
+    "pouchdb-adapter-rocksdb2": "^1.0.5"
   },
   "devDependencies": {
     "@types/pouchdb": "^6.4.0"
