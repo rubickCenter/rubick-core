@@ -23,6 +23,7 @@
     "lint": "eslint src --fix --ext .ts,.js,.cjs,.mjs "
   },
   "dependencies": {
+    "fs-extra": "^10.0.0",
     "pouchdb": "^7.2.2",
     "pouchdb-adapter-rocksdb2": "^1.0.5"
   },
