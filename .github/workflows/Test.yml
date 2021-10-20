@@ -26,10 +26,11 @@ jobs:
         uses: actions/cache@v2.1.6
         with:
           path: node_modules
-          key: ${{ matrix.platform }}-${{ hashFiles('**/package.json') }}
+          key: ${{ matrix.platform }}-${{ hashFiles('**/*/package.json') }}
           restore-keys: |
             ${{ matrix.platform }}-
 
-      - run: npm install pnpm -g && pnpm i && pnpm build
+      - run: npm install -g pnpm
+      - run: pnpm i && pnpm build
       - run: pnpm lint
       - run: pnpm test
