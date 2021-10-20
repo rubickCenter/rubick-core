@@ -41,8 +41,7 @@
     "jest": "^27.3.1",
     "prettier": "^2.4.1",
     "release-it": "^14.11.6",
-    "ts-jest": "^27.0.7",
-    "typescript": "4.5.0-dev.20211010"
+    "ts-jest": "^27.0.7"
   },
   "release-it": {
     "npm": {
