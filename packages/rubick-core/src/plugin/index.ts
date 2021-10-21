@@ -38,7 +38,7 @@ class PluginHandler implements PluginHandlerImp {
     // 加载启动所有插件到注册表中
     const pluginList = await this.list()
     for (const plugin in pluginList) {
-      await this.pluginInit(plugin)
+      await this.start(plugin)
     }
   }
 
@@ -54,11 +54,11 @@ class PluginHandler implements PluginHandlerImp {
   // 重启指定插件
   async restartPlugin(pluginName: string) {
     await this.stopPlugin(pluginName)
-    await this.pluginInit(pluginName)
+    await this.start(pluginName)
   }
 
   // 从本地获取插件对象、启动、注册
-  private async pluginInit(pluginName: string): Promise<RubickPlugin> {
+  async start(pluginName: string): Promise<RubickPlugin> {
     let PluginFactory = await import(
       path.resolve(this.baseDir, 'node_modules', pluginName)
     )
@@ -119,7 +119,7 @@ class PluginHandler implements PluginHandlerImp {
 
     for (const name of plugins) {
       // 初始化插件
-      await this.pluginInit(name)
+      await this.start(name)
     }
   }
 
