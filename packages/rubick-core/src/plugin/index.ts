@@ -35,25 +35,10 @@ class PluginHandler implements PluginHandlerImp {
 
   // 启动所有已安装插件
   async startAll() {
-    // 加载所有插件到注册表中
+    // 加载启动所有插件到注册表中
     const pluginList = await this.list()
     for (const plugin in pluginList) {
-      await this.getPlugin(plugin)
-    }
-
-    // 启动注册表中所有插件
-    for (const [pluginName, plugin] of this.regedit) {
-      await this.startPlugin(plugin, pluginName)
-    }
-  }
-
-  // 按配置启动插件对象
-  private async startPlugin(plugin: RubickPlugin, pluginName: string) {
-    try {
-      await plugin.start()
-      this.status.set(pluginName, 'RUNNING')
-    } catch (err) {
-      this.status.set(pluginName, 'ERROR')
+      await this.pluginInit(plugin)
     }
   }
 
@@ -69,19 +54,30 @@ class PluginHandler implements PluginHandlerImp {
   // 重启指定插件
   async restartPlugin(pluginName: string) {
     await this.stopPlugin(pluginName)
-    const plugin = await this.getPlugin(pluginName)
-    await this.startPlugin(plugin, pluginName)
+    await this.pluginInit(pluginName)
   }
 
-  // 从本地获取插件对象并更新注册表
-  private async getPlugin(pluginName: string): Promise<RubickPlugin> {
-    let plugin = await import(
+  // 从本地获取插件对象、启动、注册
+  private async pluginInit(pluginName: string): Promise<RubickPlugin> {
+    let PluginFactory = await import(
       path.resolve(this.baseDir, 'node_modules', pluginName)
     )
-    plugin = plugin.start === undefined ? plugin.default : plugin
-    console.log(new plugin())
+    PluginFactory =
+      PluginFactory.start === undefined ? PluginFactory.default : PluginFactory
 
-    this.regedit.set(pluginName, new plugin(this.config.get(pluginName) ?? {}))
+    const plugin = new PluginFactory(
+      this.config.get(pluginName) ?? {}
+    ) as RubickPlugin
+
+    try {
+      await plugin.start()
+      this.status.set(pluginName, 'RUNNING')
+    } catch (err) {
+      this.status.set(pluginName, 'ERROR')
+      throw err
+    }
+
+    this.regedit.set(pluginName, plugin)
     return plugin
   }
 
@@ -122,16 +118,8 @@ class PluginHandler implements PluginHandlerImp {
     await this.execCommand('add', plugins)
 
     for (const name of plugins) {
-      // 获取本地插件并注册
-      const plugin = await this.getPlugin(name)
-      // 启动插件
-      try {
-        await this.startPlugin(plugin, name)
-      } catch (e) {
-        // 插件无法启动启动, 回退注册表
-        this.regedit.delete(name)
-        throw e
-      }
+      // 初始化插件
+      await this.pluginInit(name)
     }
   }
 
