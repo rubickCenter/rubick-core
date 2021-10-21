@@ -16,7 +16,7 @@
   },
   "scripts": {
     "prepack": "bob-esbuild build --clean",
-    "test": "jest",
+    "test": "cd ../.. && jest",
     "ok": "npm run commit && npm run release",
     "commit": "git add . && gitmoji -c",
     "release": "release-it",

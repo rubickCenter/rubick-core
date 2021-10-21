@@ -6,18 +6,24 @@ const pluginDic = path.join(__dirname, 'tmp')
 
 const pluginInstance = new PluginHandler({
   baseDir: pluginDic,
-  registry: 'https://registry.npmjs.org/'
+  registry: 'https://registry.npm.taobao.org/'
 })
 
 test('Search Plugin', async () => {
-  await pluginInstance.search('rubick-plugin-demo', r => {
-    expect(r.name).toBe('rubick-plugin-demo')
+  await pluginInstance.search('rubick-plugin-db', r => {
+    expect(r.name).toBe('rubick-plugin-db')
   })
 }, 10000)
 
 test('Install Plugin', async () => {
-  await pluginInstance.install(['rubick-plugin-demo'])
-  expect(typeof pluginInstance.pluginList['rubick-plugin-demo']).toBe('string')
+  await pluginInstance.install(['rubick-plugin-db'])
+  expect(typeof (await pluginInstance.list())['rubick-plugin-db']).toBe(
+    'string'
+  )
+})
+
+test('Get Plugin', async () => {
+  console.log(await pluginInstance.api('rubick-plugin-db'))
 })
 
 fs.rmSync(pluginDic, { recursive: true, force: true })

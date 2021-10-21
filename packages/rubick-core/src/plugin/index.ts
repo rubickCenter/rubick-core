@@ -9,12 +9,21 @@ class PluginHandler implements PluginHandlerImp {
   public baseDir: string
   public registry: string
 
+  // todo 维护插件Map 在启动时进行全局自动启动、关闭
   constructor(options: { baseDir: string; registry: string }) {
     this.baseDir = options.baseDir
     this.registry = options.registry || 'https://registry.npm.taobao.org'
   }
 
-  async install(plugins: Plugins): Promise<void> {
+  async start() {}
+  async close() {}
+  // 从注册表的插件对象中 getAPI
+  async api(plugin: string) {
+    return await import(path.resolve(this.baseDir, 'node_modules', plugin))
+  }
+
+  // todo 安装后注册进插件注册表并启动
+  async install(plugins: Plugins) {
     if (!(await fs.pathExists(this.baseDir))) {
       const pkgFilePath = `${this.baseDir}/package.json`
       fs.mkdirSync(this.baseDir)
@@ -41,22 +50,25 @@ class PluginHandler implements PluginHandlerImp {
     })
   }
 
-  async update(plugins: Plugins): Promise<void> {
+  // 更新插件
+  async update(plugins: Plugins) {
     await this.execCommand('update', plugins)
   }
 
-  async uninstall(plugins: Plugins): Promise<void> {
+  // todo 关闭并卸载插件
+  async uninstall(plugins: Plugins) {
     await this.execCommand('remove', plugins)
   }
 
-  get pluginList() {
+  // 列出所有已安装插件
+  async list() {
     const installInfo: IPackageJson = JSON.parse(
-      fs.readFileSync(`${this.baseDir}/package.json`, 'utf-8')
+      await fs.readFile(`${this.baseDir}/package.json`, 'utf-8')
     )
     return installInfo.dependencies as IDependency
   }
 
-  async execCommand(cmd: string, modules: string[]): Promise<string> {
+  private async execCommand(cmd: string, modules: string[]): Promise<string> {
     let args: string[] = [cmd].concat(modules).concat('--color=always')
     args = args.concat(`--registry=${this.registry}`)
     const { stdout } = await execa(
