@@ -2,8 +2,12 @@
   "include": ["src/**/*"],
   "exclude": ["**/example", "**/node_modules", "**/dist"],
   "compilerOptions": {
-    "target": "ESNext",
-    "lib": ["ESNext", "DOM"],
+    "target": "es2017",
+    "lib": [
+      "es2017",
+      "es2015",
+      "es6"
+    ],
     "module": "commonjs",
     "declaration": true,
     "sourceMap": true,
