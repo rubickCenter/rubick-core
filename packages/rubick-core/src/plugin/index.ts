@@ -1,6 +1,5 @@
 import {
   PluginHandlerImp,
-  Plugins,
   PluginRegedit,
   RubickPlugin,
   PluginStatus,
@@ -43,7 +42,7 @@ class PluginHandler implements PluginHandlerImp {
   }
 
   // 关闭注册表中指定插件
-  async stopPlugin(pluginName: string) {
+  async stop(pluginName: string) {
     const plugin = this.regedit.get(pluginName)
     if (plugin !== undefined) {
       await plugin.stop()
@@ -53,7 +52,7 @@ class PluginHandler implements PluginHandlerImp {
 
   // 重启指定插件
   async restartPlugin(pluginName: string) {
-    await this.stopPlugin(pluginName)
+    await this.stop(pluginName)
     await this.start(pluginName)
   }
 
@@ -94,7 +93,7 @@ class PluginHandler implements PluginHandlerImp {
   }
 
   // 关闭所有插件
-  async stop() {
+  async stopAll() {
     for (const [pluginName, plugin] of this.regedit) {
       await plugin.stop()
       this.status.set(pluginName, 'STOPED')
@@ -108,7 +107,7 @@ class PluginHandler implements PluginHandlerImp {
   }
 
   // 安装、启动并注册插件
-  async install(plugins: Plugins) {
+  async install(...plugins: string[]) {
     if (!(await fs.pathExists(this.baseDir))) {
       const pkgFilePath = `${this.baseDir}/package.json`
       fs.mkdirSync(this.baseDir)
@@ -124,10 +123,10 @@ class PluginHandler implements PluginHandlerImp {
   }
 
   // 从 npm 搜索插件, 传入 streamFunc 可以流式处理
-  async search(plugin: string, streamFunc?: (data: Result) => void) {
+  async search(pluginName: string, streamFunc?: (data: Result) => void) {
     return new Promise<Result[]>((resolve, reject) => {
       const result: Result[] = []
-      const stream = search.stream(plugin)
+      const stream = search.stream(pluginName)
       stream.on('data', (data: Result) => {
         result.push(data)
         if (streamFunc !== undefined) streamFunc(data)
@@ -142,7 +141,7 @@ class PluginHandler implements PluginHandlerImp {
   }
 
   // 更新插件
-  async update(plugins: Plugins) {
+  async update(...plugins: string[]) {
     await this.execCommand('update', plugins)
 
     for (const name of plugins) {
@@ -151,10 +150,10 @@ class PluginHandler implements PluginHandlerImp {
   }
 
   // 卸载插件
-  async uninstall(plugins: Plugins) {
+  async uninstall(...plugins: string[]) {
     for (const name of plugins) {
       // 停止插件运行
-      await this.stopPlugin(name)
+      await this.stop(name)
       // 删除插件信息
       this.regedit.delete(name)
       this.status.delete(name)

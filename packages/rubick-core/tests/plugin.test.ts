@@ -17,7 +17,7 @@ describe('PluginHandler', () => {
   })
 
   test('Install Plugin', async () => {
-    await pluginInstance.install(['rubick-plugin-db'])
+    await pluginInstance.install('rubick-plugin-db')
     expect(typeof (await pluginInstance.list())['rubick-plugin-db']).toBe(
       'string'
     )
