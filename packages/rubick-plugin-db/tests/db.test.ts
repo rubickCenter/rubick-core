@@ -1,20 +1,20 @@
-import Localdb from '../src'
+import PluginDB from '../src'
 import path from 'path'
 import { DocRes } from '../src/types'
 
 const dbPath = path.join(__dirname, 'tmp')
 
-const db = new Localdb(dbPath)
+const db = new PluginDB()
 
 describe('db', () => {
   test('start', async () => {
-    await db.start()
+    await db.start({ dbPath })
   })
 
   test('put', async () => {
-    const dbapi = await db.api('test')
+    const dbapi = await db.api()
     const id = Date.now()
-    const result = (await dbapi.put({
+    const result = (await dbapi.put('test', {
       _id: `demo_${id}`,
       data: 'demo'
     })) as DocRes
@@ -23,25 +23,25 @@ describe('db', () => {
   })
 
   test('update', async () => {
-    const dbapi = await db.api('test')
+    const dbapi = await db.api()
     const id = Date.now()
-    const result = (await dbapi.put({
+    const result = (await dbapi.put('test', {
       _id: `demo_${id}`,
       data: 'demo'
     })) as DocRes
 
-    await dbapi.put({
+    await dbapi.put('test', {
       _id: `demo_${id}`,
       data: 'demo update',
       _rev: result.rev
     })
 
-    const target = (await dbapi.get(`demo_${id}`)) ?? { data: '' }
+    const target = (await dbapi.get('test', `demo_${id}`)) ?? { data: '' }
 
     expect(target.data).toBe('demo update')
   })
 
   test('close', async () => {
-    await db.close()
+    await db.stop()
   })
 })
