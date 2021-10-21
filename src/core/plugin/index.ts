@@ -1,10 +1,9 @@
-import {
-  PluginDependencies,
-  PluginHandlerImp,
-  Plugins
-} from './PluginHandlerImp'
+import { PluginHandlerImp, Plugins } from './PluginHandlerImp'
 import execa from 'execa'
 import fs from 'fs-extra'
+import path from 'path'
+import search, { Result } from 'libnpmsearch'
+import { IPackageJson, IDependency } from '@ts-type/package-dts/package-json'
 
 class PluginHandler implements PluginHandlerImp {
   public baseDir: string
@@ -19,35 +18,54 @@ class PluginHandler implements PluginHandlerImp {
     if (!(await fs.pathExists(this.baseDir))) {
       const pkgFilePath = `${this.baseDir}/package.json`
       fs.mkdirSync(this.baseDir)
-      fs.writeFileSync(pkgFilePath, '{}')
+      fs.writeFileSync(pkgFilePath, '{"dependencies":{}}')
     }
-    await this.execCommand('install', plugins)
+    await this.execCommand('add', plugins)
+  }
+
+  // 搜索 npm 包, 传入 streamFunc 可以流式处理
+  async search(plugin: string, streamFunc?: (data: Result) => void) {
+    return new Promise<Result[]>((resolve, reject) => {
+      const result: Result[] = []
+      const stream = search.stream(plugin)
+      stream.on('data', (data: Result) => {
+        result.push(data)
+        if (streamFunc !== undefined) streamFunc(data)
+      })
+      stream.on('end', () => {
+        resolve(result)
+      })
+      stream.on('error', e => {
+        reject(e)
+      })
+    })
   }
 
   async update(plugins: Plugins): Promise<void> {
-    await this.execCommand('install', plugins)
+    await this.execCommand('update', plugins)
   }
 
   async uninstall(plugins: Plugins): Promise<void> {
-    await this.execCommand('uninstall', plugins)
+    await this.execCommand('remove', plugins)
   }
 
-  get pluginList(): Promise<PluginDependencies> {
-    const installInfo: string = fs.readFileSync(
-      `${this.baseDir}/package.json`,
-      'utf-8'
+  get pluginList() {
+    const installInfo: IPackageJson = JSON.parse(
+      fs.readFileSync(`${this.baseDir}/package.json`, 'utf-8')
     )
-    return JSON.parse(installInfo).dependencies
+    return installInfo.dependencies as IDependency
   }
 
   async execCommand(cmd: string, modules: string[]): Promise<string> {
-    let args: string[] = [cmd]
-      .concat(modules)
-      .concat('--color=always')
-      .concat('--save')
+    let args: string[] = [cmd].concat(modules).concat('--color=always')
     args = args.concat(`--registry=${this.registry}`)
-
-    const { stdout } = await execa('npm', args, { cwd: this.baseDir })
+    const { stdout } = await execa(
+      path.resolve('node_modules/.bin/pnpm'),
+      args,
+      {
+        cwd: this.baseDir
+      }
+    )
     return stdout
   }
 }
