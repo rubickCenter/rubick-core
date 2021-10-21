@@ -1,6 +1,6 @@
 {
   "name": "rubick-plugin-db",
-  "version": "0.0.2-22",
+  "version": "0.0.2-23",
   "description": "rubick core api",
   "author": "muwoo",
   "main": "dist/index.js",
