@@ -4,7 +4,7 @@ export interface PluginHandlerImp {
 }
 
 export interface RubickPlugin {
-  start: (opt: object) => Promise<void>
+  start: () => Promise<void>
   stop: () => Promise<void>
   api: () => Promise<object>
 }

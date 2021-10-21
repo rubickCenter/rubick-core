@@ -1,19 +1,19 @@
 import { PluginHandler } from '../src'
 import path from 'path'
-import fs from 'fs-extra'
+import os from 'os'
 
-const pluginDic = path.join(__dirname, 'tmp')
+const pluginDic = path.join(os.tmpdir(), 'test')
 
 const pluginInstance = new PluginHandler({
   baseDir: pluginDic,
-  registry: 'https://registry.npm.taobao.org/'
+  registry: 'https://registry.npmjs.org/'
 })
 
 test('Search Plugin', async () => {
   await pluginInstance.search('rubick-plugin-db', r => {
     expect(r.name).toBe('rubick-plugin-db')
   })
-}, 10000)
+})
 
 test('Install Plugin', async () => {
   await pluginInstance.install(['rubick-plugin-db'])
@@ -26,4 +26,4 @@ test('Get Plugin', async () => {
   await pluginInstance.api('rubick-plugin-db')
 })
 
-fs.rmSync(pluginDic, { recursive: true, force: true })
+// fs.rmSync(pluginDic, { recursive: true, force: true })

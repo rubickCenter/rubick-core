@@ -50,7 +50,7 @@ class PluginHandler implements PluginHandlerImp {
   // 按配置启动插件对象
   private async startPlugin(plugin: RubickPlugin, pluginName: string) {
     try {
-      await plugin.start(this.config.get(pluginName) ?? {})
+      await plugin.start()
       this.status.set(pluginName, 'RUNNING')
     } catch (err) {
       this.status.set(pluginName, 'ERROR')
@@ -80,7 +80,8 @@ class PluginHandler implements PluginHandlerImp {
     )
     plugin = plugin.start === undefined ? plugin.default : plugin
     console.log(new plugin())
-    this.regedit.set(pluginName, new plugin())
+
+    this.regedit.set(pluginName, new plugin(this.config.get(pluginName) ?? {}))
     return plugin
   }
 

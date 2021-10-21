@@ -4,11 +4,11 @@ import { DocRes } from '../src/types'
 
 const dbPath = path.join(__dirname, 'tmp')
 
-const db = new PluginDB()
+const db = new PluginDB({ dbPath })
 
 describe('db', () => {
   test('start', async () => {
-    await db.start({ dbPath })
+    await db.start()
   })
 
   test('put', async () => {
