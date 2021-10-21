@@ -1,5 +1,5 @@
 {
-  "name": "@rubick/rubick-plugin-db",
+  "name": "rubick-plugin-db",
   "version": "0.0.2-21",
   "description": "rubick core api",
   "author": "muwoo",

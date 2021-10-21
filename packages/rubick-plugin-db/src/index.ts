@@ -120,8 +120,8 @@ export default class Localdb<T> {
         const record = await this.pouchDB.get(this.getDocId(keyName, _id))
 
         const result = {
-          _id,
-          ...(await this.pouchDB.remove(record))
+          ...(await this.pouchDB.remove(record)),
+          _id
         }
 
         return result
