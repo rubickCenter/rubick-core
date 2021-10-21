@@ -3,14 +3,14 @@ import fs from 'fs-extra'
 import PouchDB from 'pouchdb'
 import rocksdb from 'pouchdb-adapter-rocksdb2'
 
-PouchDB.plugin(rocksdb)
-
 import {
   SINGLE_ATTACHMENT_MAX_SIZE,
   SINGLE_DOC_MAX_SIZE
 } from './helpers/config'
 
 import { Doc, DocRes, DBError, AllDocsOptions } from './types'
+
+PouchDB.plugin(rocksdb)
 
 export default class Localdb<T> {
   readonly docMaxByteLength
@@ -19,11 +19,11 @@ export default class Localdb<T> {
   public defaultDbName
   public pouchDB!: PouchDB.Database<Doc<T>>
 
-  constructor(dbPath: string, dbName?: string) {
+  constructor(opt: { dbPath?: string; dbName?: string }) {
     this.docMaxByteLength = SINGLE_DOC_MAX_SIZE // 2M
     this.docAttachmentMaxByteLength = SINGLE_ATTACHMENT_MAX_SIZE // 20M
-    this.dbpath = dbPath
-    this.defaultDbName = path.join(dbPath, dbName ?? 'rubick')
+    this.dbpath = opt.dbPath ?? './tmp'
+    this.defaultDbName = path.join(this.dbpath, opt.dbName ?? 'rubick')
   }
 
   async start() {

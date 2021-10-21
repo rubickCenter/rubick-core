@@ -1,9 +1,10 @@
 import Localdb from './localdb'
 
+// TODO 生成插件 swagger 文档为 plugin.json
 export default class PluginDB<T> {
   localdb!: Localdb<T>
-  async start(opt: { dbPath: string; dbName?: string }) {
-    this.localdb ?? (this.localdb = new Localdb<T>(opt.dbPath, opt.dbName))
+  async start(opt: { dbPath?: string; dbName?: string }) {
+    this.localdb ?? (this.localdb = new Localdb<T>(opt))
     await this.localdb.start()
   }
 

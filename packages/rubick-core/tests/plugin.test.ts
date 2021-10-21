@@ -23,7 +23,7 @@ test('Install Plugin', async () => {
 })
 
 test('Get Plugin', async () => {
-  console.log(await pluginInstance.api('rubick-plugin-db'))
+  await pluginInstance.api('rubick-plugin-db')
 })
 
 fs.rmSync(pluginDic, { recursive: true, force: true })

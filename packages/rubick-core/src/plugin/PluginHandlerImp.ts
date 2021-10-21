@@ -3,12 +3,18 @@ export interface PluginHandlerImp {
   registry: string
 }
 
-export interface RubickPlugin<Options, API> {
-  start: (opt: Options) => Promise<void>
+export interface RubickPlugin {
+  start: (opt: object) => Promise<void>
   stop: () => Promise<void>
-  api: () => Promise<API>
+  api: () => Promise<object>
 }
 
-export interface PluginRegedit<API> extends Map<string, API> {}
+export interface PluginConfig {
+  config: object
+}
+
+export type PluginStatus = 'RUNNING' | 'STOPED' | 'ERROR'
+
+export interface PluginRegedit extends Map<string, RubickPlugin> {}
 
 export type Plugins = string[]
