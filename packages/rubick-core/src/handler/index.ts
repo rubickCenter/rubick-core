@@ -149,7 +149,7 @@ class PluginHandler {
   }
 
   // 获取插件 API
-  // TODO 中间件 + 校验
+  // TODO 校验入参
   async api<T extends object>(pluginName: string) {
     const plugin = this.regedit.get(pluginName)
     if (plugin === undefined) {
