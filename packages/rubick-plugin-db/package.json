@@ -16,11 +16,8 @@
   },
   "scripts": {
     "prepack": "bob-esbuild build --clean",
-    "test": "jest",
-    "ok": "npm run commit && npm run release",
-    "commit": "git add . && gitmoji -c",
-    "release": "release-it",
-    "lint": "eslint src --fix --ext .ts,.js,.cjs,.mjs "
+    "test": "cd ../.. && npm run test",
+    "lint": "cd ../.. && npm run lint"
   },
   "dependencies": {
     "fs-extra": "^10.0.0",

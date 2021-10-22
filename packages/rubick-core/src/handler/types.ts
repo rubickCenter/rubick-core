@@ -1,6 +1,18 @@
-export interface PluginHandlerImp {
+import {
+  ConsolaReporterLogObject,
+  ConsolaReporterArgs,
+  LogLevel
+} from 'consola'
+
+export interface PluginHandlerOptions {
   baseDir: string
   registry: string
+  pluginConfig?: { [pluginName: string]: object }
+  loglevel?: LogLevel
+  loggerReporter?: (
+    logObj: ConsolaReporterLogObject,
+    args: ConsolaReporterArgs
+  ) => void
 }
 
 export interface RubickPlugin {
