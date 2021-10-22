@@ -103,6 +103,7 @@ class PluginHandler {
       await plugin.start()
       this.status.set(pluginName, 'RUNNING')
 
+      // TODO 校验 API 合法才算启动成功
       logger.info(`Plugin ${pluginName} started`)
       return plugin
     } catch (error) {
