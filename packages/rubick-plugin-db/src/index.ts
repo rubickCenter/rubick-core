@@ -1,6 +1,6 @@
 import Localdb from './localdb'
 
-// TODO 生成插件 swagger 文档为 plugin.json
+// TODO 生成插件文档为 plugin.json 描述插件配置参数和 api 出入参
 export default class PluginDB<T> {
   localdb!: Localdb<T>
   opt: { dbPath?: string | undefined; dbName?: string | undefined }
