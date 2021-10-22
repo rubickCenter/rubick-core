@@ -1,12 +1,16 @@
 import { PluginHandler } from '../src'
 import path from 'path'
 import os from 'os'
+import { env } from 'process'
 
 const pluginDic = path.join(os.tmpdir(), 'test-' + Date.now().toString())
 
 const pluginInstance = new PluginHandler({
   baseDir: pluginDic,
-  registry: 'https://registry.npm.taobao.org/',
+  registry:
+    env.ACTION === undefined
+      ? 'https://registry.npm.taobao.org'
+      : 'https://registry.npmjs.org/',
   loglevel: 5
 })
 
