@@ -3,26 +3,33 @@ import {
   PluginRegedit,
   RubickPlugin,
   PluginStatus,
-  PluginConfig
+  PluginInfo
 } from './PluginHandlerImp'
 import execa from 'execa'
 import fs from 'fs-extra'
 import search, { Result } from 'libnpmsearch'
 import { IPackageJson, IDependency } from '@ts-type/package-dts/package-json'
 import path from 'path'
+import got from 'got'
 
 class PluginHandler implements PluginHandlerImp {
-  public baseDir: string
-  public registry: string
-  regedit: PluginRegedit = new Map()
+  private regedit: PluginRegedit = new Map()
+  // 插件安装地址
+  baseDir: string
+  registry: string
   config = new Map<string, object>()
   status = new Map<string, PluginStatus>()
 
   constructor(options: {
     baseDir: string
     registry: string
-    pluginConfig?: { [plugin: string]: object }
+    pluginConfig?: { [pluginName: string]: object }
   }) {
+    // 初始化插件存放
+    if (!fs.existsSync(options.baseDir)) {
+      fs.mkdirsSync(options.baseDir)
+      fs.writeFileSync(`${options.baseDir}/package.json`, '{"dependencies":{}}')
+    }
     this.baseDir = options.baseDir
     this.registry = options.registry || 'https://registry.npm.taobao.org'
 
@@ -34,7 +41,6 @@ class PluginHandler implements PluginHandlerImp {
 
   // 启动所有已安装插件
   async startAll() {
-    // 加载启动所有插件到注册表中
     const pluginList = await this.list()
     for (const plugin in pluginList) {
       await this.start(plugin)
@@ -50,24 +56,21 @@ class PluginHandler implements PluginHandlerImp {
     }
   }
 
-  // 重启指定插件
-  async restartPlugin(pluginName: string) {
-    await this.stop(pluginName)
-    await this.start(pluginName)
-  }
-
-  // 从本地获取插件对象、启动、注册
+  // 启动插件
   async start(pluginName: string): Promise<RubickPlugin> {
+    // 动态引入插件
     let PluginFactory = await import(
       path.resolve(this.baseDir, 'node_modules', pluginName)
     )
-    PluginFactory =
-      PluginFactory.start === undefined ? PluginFactory.default : PluginFactory
+    // 兼容 cjs 和 esm
+    PluginFactory = PluginFactory.default ?? PluginFactory
 
+    // 读取配置实例化插件对象
     const plugin = new PluginFactory(
       this.config.get(pluginName) ?? {}
     ) as RubickPlugin
 
+    // 启动插件
     try {
       await plugin.start()
       this.status.set(pluginName, 'RUNNING')
@@ -76,20 +79,34 @@ class PluginHandler implements PluginHandlerImp {
       throw err
     }
 
+    // 注册插件
     this.regedit.set(pluginName, plugin)
     return plugin
   }
 
-  // TODO 从 jsdelivr 远程获得
-  // 从 plugin.json 获取插件文档 包括插件信息、配置文档和API文档
-  async getPluginDoc(pluginName: string): Promise<PluginConfig> {
-    const pluginConfig = JSON.parse(
-      await fs.readFile(
-        path.resolve(this.baseDir, 'node_modules', pluginName, 'plugin.json'),
-        'utf-8'
-      )
-    ) as PluginConfig
-    return pluginConfig
+  // 获取插件信息、配置文档和API文档
+  async getPluginInfo(pluginName: string) {
+    let pluginInfo: PluginInfo
+    const pluginJSONPath = path.resolve(
+      this.baseDir,
+      'node_modules',
+      pluginName,
+      'plugin.json'
+    )
+    // 从本地获取
+    if (await fs.pathExists(pluginJSONPath)) {
+      pluginInfo = JSON.parse(
+        await fs.readFile(pluginJSONPath, 'utf-8')
+      ) as PluginInfo
+    } else {
+      // 本地没有从远程获取
+      const { data } = await got
+        .get(`https://cdn.jsdelivr.net/npm/${pluginName}/plugin.json`)
+        .json()
+      // Todo 校验
+      pluginInfo = data as PluginInfo
+    }
+    return pluginInfo
   }
 
   // 关闭所有插件
@@ -106,18 +123,13 @@ class PluginHandler implements PluginHandlerImp {
     if (plugin !== undefined) return (await plugin.api()) as T
   }
 
-  // 安装、启动并注册插件
+  // 安装并启动插件
   async install(...plugins: string[]) {
-    if (!(await fs.pathExists(this.baseDir))) {
-      const pkgFilePath = `${this.baseDir}/package.json`
-      fs.mkdirSync(this.baseDir)
-      fs.writeFileSync(pkgFilePath, '{"dependencies":{}}')
-    }
     // 安装
     await this.execCommand('add', plugins)
 
     for (const name of plugins) {
-      // 初始化插件
+      // 启动插件
       await this.start(name)
     }
   }
@@ -145,7 +157,9 @@ class PluginHandler implements PluginHandlerImp {
     await this.execCommand('update', plugins)
 
     for (const name of plugins) {
-      await this.restartPlugin(name)
+      // 重启插件
+      await this.stop(name)
+      await this.start(name)
     }
   }
 

@@ -9,7 +9,7 @@ export interface RubickPlugin {
   api: () => Promise<object>
 }
 
-export interface PluginConfig {
+export interface PluginInfo {
   config: object
 }
 
