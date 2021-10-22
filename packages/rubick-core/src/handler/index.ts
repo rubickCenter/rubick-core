@@ -102,9 +102,9 @@ class PluginHandler implements PluginHandlerImp {
   }
 
   // 获取插件 API
-  async api(pluginName: string) {
+  async api<T extends object>(pluginName: string) {
     const plugin = this.regedit.get(pluginName)
-    if (plugin !== undefined) return plugin.api()
+    if (plugin !== undefined) return (await plugin.api()) as T
   }
 
   // 安装、启动并注册插件
