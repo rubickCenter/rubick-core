@@ -1,3 +1,3 @@
-import PluginHandler from './plugin'
+import PluginHandler from './handler'
 
 export { PluginHandler }

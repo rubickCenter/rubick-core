@@ -3,10 +3,10 @@ name: Test CI
 on:
   push:
     branches:
-      - master
+      - dev
   pull_request:
     branches:
-      - master
+      - dev
 
 jobs:
   Test:
@@ -17,19 +17,29 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2.4.1
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: NPM Cache
-        uses: actions/cache@v2.1.6
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-pnpm-modules
         with:
-          path: node_modules
-          key: ${{ matrix.platform }}-${{ hashFiles('**/package.json') }}
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
-            ${{ matrix.platform }}-
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
 
-      - run: npm install pnpm -g && pnpm i && pnpm build
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.0.2
+          run_install: true
+
+      - run: pnpm build
       - run: pnpm lint
       - run: pnpm test
+        env:
+          ACTION: true

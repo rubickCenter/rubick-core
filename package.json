@@ -19,12 +19,13 @@
     "ok": "npm run commit && npm run release",
     "commit": "git add . && gitmoji -c",
     "release": "release-it",
-    "lint": "eslint packages --fix --ext .ts,.js,.cjs,.mjs "
+    "lint": "eslint packages --fix --ext .ts,.js,.cjs,.mjs --ignore-path .gitignore"
   },
   "devDependencies": {
+    "@release-it/bumper": "^3.0.1",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.1",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
     "bob-esbuild": "^2.0.1",
     "bob-esbuild-cli": "^2.0.0",
     "esbuild": "^0.13.8",
@@ -37,15 +38,25 @@
     "eslint-plugin-promise": "^5.1.0",
     "gitmoji-changelog": "^2.2.1",
     "gitmoji-cli": "^4.7.0",
-    "jest": "^27.3.0",
+    "jest": "^27.3.1",
     "prettier": "^2.4.1",
     "release-it": "^14.11.6",
     "ts-jest": "^27.0.7",
-    "typescript": "4.5.0-dev.20211010"
+    "typescript": "^4.4.4"
   },
   "release-it": {
     "npm": {
       "publish": false
+    },
+    "plugins": {
+      "@release-it/bumper": {
+        "in": "package.json",
+        "out": [
+          "packages/rubick-core/package.json",
+          "packages/rubick-plugin-db/package.json",
+          "packages/rubick-plugin-p2p/package.json"
+        ]
+      }
     },
     "hooks": {
       "before:git:commit": "npm run lint"

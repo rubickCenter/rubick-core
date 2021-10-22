@@ -1,43 +1,47 @@
-import { Localdb } from '../src'
+import PluginDB from '../src'
 import path from 'path'
+import { DocRes } from '../src/types'
 
 const dbPath = path.join(__dirname, 'tmp')
 
-const db = new Localdb(dbPath)
-
-db.init()
+const db = new PluginDB({ dbPath })
 
 describe('db', () => {
+  test('start', async () => {
+    await db.start()
+  })
+
   test('put', async () => {
+    const dbapi = await db.api()
     const id = Date.now()
-    const result = await db.put('test', {
+    const result = (await dbapi.put('test', {
       _id: `demo_${id}`,
       data: 'demo'
-    })
-    // @ts-expect-error
-    if ('id' in result) {
-      expect(result.id).toBe(`demo_${id}`)
-    }
+    })) as DocRes
+
+    expect(result._id).toBe(`demo_${id}`)
   })
 
   test('update', async () => {
+    const dbapi = await db.api()
     const id = Date.now()
-
-    const result = await db.put('test', {
+    const result = (await dbapi.put('test', {
       _id: `demo_${id}`,
       data: 'demo'
-    })
+    })) as DocRes
 
-    await db.put('test', {
+    await dbapi.put('test', {
       _id: `demo_${id}`,
       data: 'demo update',
-      // @ts-expect-error
       _rev: result.rev
     })
 
-    const target = await db.get('test', `demo_${id}`)
+    const target = (await dbapi.get('test', `demo_${id}`)) ?? { data: '' }
 
-    // @ts-expect-error
     expect(target.data).toBe('demo update')
+  })
+
+  test('close', async () => {
+    await db.stop()
   })
 })

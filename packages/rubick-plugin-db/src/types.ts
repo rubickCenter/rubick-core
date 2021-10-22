@@ -1,17 +1,18 @@
 type RevisionId = string
 
-export interface Doc {
+// todo 附件和索引
+export interface Doc<T> {
   _id: string
-  data: string
+  data: T
   _rev?: RevisionId
-  _attachments?: string
+  _attachments?: any
 }
 
 export interface DocRes {
   id: string
-  _id: string
   ok: boolean
   rev: RevisionId
+  _id: string
 }
 
 export interface DBError {
