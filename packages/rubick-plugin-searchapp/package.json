@@ -1,0 +1,36 @@
+{
+  "name": "@rubick/rubick-core",
+  "version": "0.0.2-21",
+  "description": "rubick core api",
+  "author": "muwoo",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "homepage": "https://github.com/rubickCenter/rubick-core#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubickCenter/rubick-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rubickCenter/rubick-core/issues"
+  },
+  "scripts": {
+    "prepack": "bob-esbuild build --clean",
+    "test": "jest",
+    "ok": "npm run commit && npm run release",
+    "commit": "git add . && gitmoji -c",
+    "release": "release-it",
+    "lint": "eslint src --fix --ext .ts,.js,.cjs,.mjs "
+  },
+  "dependencies": {
+    "get-mac-apps": "^1.0.2"
+  },
+  "devDependencies": {
+    "@ts-type/package-dts": "^1.0.51",
+    "@types/fs-extra": "^9.0.13",
+    "@types/libnpmsearch": "^2.0.2"
+  },
+  "files": [
+    "dist"
+  ]
+}
