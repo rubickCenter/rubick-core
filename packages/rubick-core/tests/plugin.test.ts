@@ -6,7 +6,7 @@ const pluginDic = path.join(os.tmpdir(), 'test-' + Date.now().toString())
 
 const pluginInstance = new PluginHandler({
   baseDir: pluginDic,
-  registry: 'https://registry.npmjs.org/',
+  registry: 'https://registry.npm.taobao.org/',
   loglevel: 5
 })
 
@@ -38,6 +38,6 @@ describe('PluginHandler', () => {
 
   test('Uninstall Plugin', async () => {
     await pluginInstance.uninstall('rubick-plugin-db')
-    expect(await pluginInstance.list()).toBe([])
+    expect((await pluginInstance.list()).length).toBe(0)
   })
 })

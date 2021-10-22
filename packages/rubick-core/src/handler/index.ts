@@ -64,7 +64,7 @@ class PluginHandler {
   // 关闭注册表中指定插件
   async stop(pluginName: string) {
     const plugin = this.regedit.get(pluginName)
-    if (plugin !== undefined) {
+    if (plugin !== undefined && this.status.get(pluginName) === 'RUNNING') {
       try {
         await plugin.stop()
         this.status.set(pluginName, 'STOPED')
@@ -229,7 +229,7 @@ class PluginHandler {
   // 运行包管理器
   private async execCommand(cmd: string, modules: string[]): Promise<string> {
     let args: string[] = [cmd].concat(modules).concat('--color=always')
-    args = args.concat(`--registry=${this.registry}`)
+    if (cmd !== 'remove') args = args.concat(`--registry=${this.registry}`)
     const { stdout, stderr } = await execa(
       path.resolve(__dirname, '../../node_modules/.bin/pnpm'),
       args,
