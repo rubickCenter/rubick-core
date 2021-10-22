@@ -16,5 +16,3 @@ export interface PluginConfig {
 export type PluginStatus = 'RUNNING' | 'STOPED' | 'ERROR'
 
 export interface PluginRegedit extends Map<string, RubickPlugin> {}
-
-export type Plugins = string[]
