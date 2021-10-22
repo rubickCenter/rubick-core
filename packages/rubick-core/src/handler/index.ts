@@ -31,7 +31,7 @@ class PluginHandler {
       fs.writeFileSync(`${options.baseDir}/package.json`, '{"dependencies":{}}')
     }
     this.baseDir = options.baseDir
-    this.registry = options.registry || 'https://registry.npm.taobao.org'
+    this.registry = options.registry ?? 'https://registry.npm.taobao.org'
 
     // 自定义日志级别
     if (options.loglevel !== undefined) logger.level = options.loglevel
@@ -171,7 +171,7 @@ class PluginHandler {
 
   // 从 npm 搜索插件, 传入 streamFunc 可以流式处理
   async search(pluginName: string, streamFunc?: (data: Result) => void) {
-    return new Promise<Result[]>((resolve, reject) => {
+    return await new Promise<Result[]>((resolve, reject) => {
       const result: Result[] = []
       const stream = search.stream(pluginName)
       stream.on('data', (data: Result) => {
@@ -238,7 +238,7 @@ class PluginHandler {
       }
     )
     logger.debug(stdout)
-    if (stderr) {
+    if (stderr !== undefined) {
       logger.error(stderr)
     }
     return stdout
