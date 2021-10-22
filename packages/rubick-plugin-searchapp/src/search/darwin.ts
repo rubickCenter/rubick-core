@@ -51,14 +51,14 @@ async function getAppIcon(
   }
 }
 
-export default async (nativeImage: any): Promise<Array<AppPlugin>> => {
+export default async (nativeImage: any): Promise<AppPlugin[]> => {
   let apps = await getMacApps.getApps()
 
   apps = apps.filter((app: any) => {
     const extname = path.extname(app.path)
     return extname === '.app' || extname === '.prefPane'
   })
-  for (let app of apps) {
+  for (const app of apps) {
     app.icon = await getAppIcon(app.path, nativeImage)
     // todo getApp size
   }
