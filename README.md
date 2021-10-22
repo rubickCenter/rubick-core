@@ -1,3 +1,9 @@
+# RubickCore
+
+rubick 的插件能力系统
+
+rubickcore 可通过安装系统插件, 动态获得任何能力
+
 ## API 设计
 
 ### 插件类 `Class PluginHandler`
@@ -6,6 +12,7 @@
 const { PluginHandler } = require('@rubick/rubick-core')
 
 const pluginInstance = new PluginHandler({
+  // 插件安装目录
   baseDir: path.join(__dirname, './plugin')
 })
 ```
@@ -17,13 +24,13 @@ const pluginInstance = new PluginHandler({
 从 `npm` 上安装插件
 
 ```js
-pluginInstance.install(plugins)
+pluginInstance.install(plugin1, plugin2, plugin3)
 ```
 
 **eg:**
 
 ```js
-pluginInstance.install(['rubick-plugin-demo'])
+pluginInstance.install('rubick-plugin-demo')
 ```
 
 ##### 2. uninstall
@@ -31,13 +38,13 @@ pluginInstance.install(['rubick-plugin-demo'])
 卸载插件
 
 ```js
-pluginInstance.uninstall(plugins)
+pluginInstance.uninstall(plugin1, plugin2, plugin3)
 ```
 
 **eg:**
 
 ```js
-pluginInstance.uninstall(['rubick-plugin-demo'])
+pluginInstance.uninstall('rubick-plugin-demo')
 ```
 
 ##### 3. update
@@ -45,50 +52,66 @@ pluginInstance.uninstall(['rubick-plugin-demo'])
 更新插件，需带具体的版本号
 
 ```js
-pluginInstance.update(plugins)
+pluginInstance.update(plugin1, plugin2, plugin3)
 ```
 
 **eg:**
 
 ```js
-pluginInstance.update(['rubick-plugin-demo@0.1.1'])
+pluginInstance.update('rubick-plugin-demo@0.1.1')
 ```
 
-### 系统插件使用 `Class SysPluginHandler`
+##### 4. search
 
-系统插件生存于 `rubick` 工具的完整生命周期，也就是说只要 `rubick` 在使用，
-系统插件也会一直运行。
+搜索插件
 
 ```js
-const { SysPluginHandler } = require('@rubick/rubick-core')
-
-const sysPluginHandler = new SysPluginHandler(options)
+pluginInstance.search(plugin)
 ```
 
-#### 实例方法
-
-##### 1. register
-
-将插件注册到系统
+**eg:**
 
 ```js
-sysPluginHandler.register(pluginName, pluginPath)
+pluginInstance.search('rubick-plugin-demo')
 ```
 
-##### 2. mainLoad
+## 系统插件开发
 
-主进程运行系统插件所有主进程函数，该方法在主进程中调用
+系统插件需要在入口文件暴露插件对象
+
+系统插件可在构造函数 `constructor` 中设置插件配置, 配置参数均为**可选**参数
+
+插件所有输出都会被重定向到全局日志器中
+
+系统插件必须有几个生命周期函数:
+
+| 函数名称 | 作用                 |
+| -------- | -------------------- |
+| start    | · 启动插件时被调用   |
+| stop     | · 关闭插件时被调用   |
+| api      | · 获取插件功能时调用 |
+
+**eg:**
 
 ```js
-sysPluginHandler.mainLoad()
-```
+export default class PluginDB {
+  constructor(options: { dbPath?: string, dbName?: string }) {
+    if (dbPath === undefined) throw new Error('必须指定参数 dbPath')
+    this.options = options
+  }
 
-##### 2. rendererLoad
+  async start() {
+    this.localdb = new Localdb(this.opt)
+  }
 
-渲染进程运行系统插件所有渲染进程函数，该方法在渲染进程中调用
+  async stop() {
+    await this.localdb.stop()
+  }
 
-```js
-sysPluginHandler.rendererLoad()
+  async api() {
+    return await this.localdb.api()
+  }
+}
 ```
 
 ## 贡献指南

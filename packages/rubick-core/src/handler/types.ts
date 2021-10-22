@@ -6,7 +6,7 @@ import {
 
 export interface PluginHandlerOptions {
   baseDir: string
-  registry: string
+  registry?: string
   pluginConfig?: { [pluginName: string]: object }
   loglevel?: LogLevel
   loggerReporter?: (
