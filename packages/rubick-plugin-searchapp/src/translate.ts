@@ -32,7 +32,10 @@ function translate(sourceStr: string): string {
  */
 function searchPinYin(str: string, data: any): string {
   for (const key in data) {
-    if (data.hasOwnProperty(key) && data[key].indexOf(str) !== -1) {
+    if (
+      Object.prototype.hasOwnProperty.call(data, key) &&
+      data[key].indexOf(str) !== -1
+    ) {
       return key
     }
   }
@@ -46,7 +49,6 @@ function searchPinYin(str: string, data: any): string {
  */
 function firstCapital(str: string): string {
   if (str) {
-    // @ts-expect-error
     const [first] = str
     const other = str.replace(/^\S/, '')
     return `${first.toUpperCase()}${other}`

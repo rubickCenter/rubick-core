@@ -8,10 +8,15 @@ const isZhRegex = /[\u4e00-\u9fa5]/
 
 async function getAppIcon(
   appPath: string,
-  nativeImage: { createThumbnailFromPath: Function }
+  nativeImage: {
+    createThumbnailFromPath: (
+      iconPath: string,
+      size: { width: number; height: number }
+    ) => { toDataURL: () => string }
+  }
 ): Promise<string | null> {
   try {
-    const appName: string = appPath.split('/').pop() || ''
+    const appName: string = appPath.split('/').pop() ?? ''
     const extname: string = path.extname(appName)
     const appSubStr: string = appName.split(extname)[0]
     const path1 = path.join(appPath, `/Contents/Resources/App.icns`)
@@ -73,7 +78,7 @@ export default async (nativeImage: any): Promise<AppPlugin[]> => {
       value: 'plugin',
       desc: app.path,
       type: 'app',
-      action: `open ${app.path.replace(' ', '\\ ')}`,
+      action: `open ${app.path.replace(' ', '\\ ') as string}`,
       keyWords: [appSubStr]
     }
 

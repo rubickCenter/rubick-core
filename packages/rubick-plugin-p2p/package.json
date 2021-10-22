@@ -1,5 +1,5 @@
 {
-  "name": "@rubick/rubick-plugin-p2p",
+  "name": "rubick-plugin-p2p",
   "version": "0.0.2-21",
   "description": "rubick core api",
   "author": "sovlookup",
