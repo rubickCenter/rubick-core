@@ -238,7 +238,7 @@ class PluginHandler {
       }
     )
     logger.debug(stdout)
-    if (stderr !== undefined) {
+    if (stderr !== '') {
       logger.error(stderr)
     }
     return stdout

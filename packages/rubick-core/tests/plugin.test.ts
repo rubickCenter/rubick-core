@@ -19,7 +19,7 @@ describe('PluginHandler', () => {
     await pluginInstance.search('rubick-plugin-db', r => {
       expect(r.name).toBe('rubick-plugin-db')
     })
-  })
+  }, 30000)
 
   test('Install Plugin', async () => {
     await pluginInstance.install('rubick-plugin-db')

@@ -25,7 +25,7 @@
     "fs-extra": "^10.0.0",
     "got": "^11.8.2",
     "libnpmsearch": "^3.1.2",
-    "pnpm": "^6.17.2"
+    "pnpm": "^6.18.0"
   },
   "devDependencies": {
     "@ts-type/package-dts": "^1.0.51",
