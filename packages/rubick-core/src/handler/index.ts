@@ -13,6 +13,10 @@ import path from 'path'
 import got from 'got'
 import logger from './logger'
 
+/**
+ * 插件管理器
+ * @class PluginHandler
+ */
 class PluginHandler {
   private readonly regedit: PluginRegedit = new Map()
   // 插件安装地址
@@ -24,6 +28,11 @@ class PluginHandler {
   // 插件状态
   readonly status = new Map<string, PluginStatus>()
 
+  /**
+   * Creates an instance of PluginHandler.
+   * @param {PluginHandlerOptions} options
+   * @memberof PluginHandler
+   */
   constructor(options: PluginHandlerOptions) {
     // 初始化插件存放
     if (!fs.existsSync(options.baseDir)) {
@@ -61,7 +70,11 @@ class PluginHandler {
     }
   }
 
-  // 关闭注册表中指定插件
+  /**
+   * 关闭注册表中指定插件
+   * @param {string} pluginName 插件名称
+   * @memberof PluginHandler
+   */
   async stop(pluginName: string) {
     const plugin = this.regedit.get(pluginName)
     if (plugin !== undefined && this.status.get(pluginName) === 'RUNNING') {
@@ -78,7 +91,11 @@ class PluginHandler {
     }
   }
 
-  // 启动插件
+  /**
+   * 启动插件
+   * @param {string} pluginName 插件名称
+   * @memberof PluginHandler
+   */
   async start(pluginName: string): Promise<RubickPlugin | undefined> {
     const pluginPath = path.resolve(this.baseDir, 'node_modules', pluginName)
     if (!(await fs.pathExists(pluginPath))) {
@@ -115,7 +132,11 @@ class PluginHandler {
     }
   }
 
-  // 获取插件信息、配置文档和API文档
+  /**
+   * 获取插件信息、配置文档和API文档
+   * @param {string} pluginName 插件名称
+   * @memberof PluginHandler
+   */
   async getPluginInfo(pluginName: string) {
     let pluginInfo: PluginInfo
     const pluginJSONPath = path.resolve(
@@ -141,15 +162,22 @@ class PluginHandler {
     return pluginInfo
   }
 
-  // 关闭所有插件
+  /**
+   * 关闭所有插件
+   * @memberof PluginHandler
+   */
   async stopAll() {
     for (const [pluginName] of this.regedit) {
       await this.stop(pluginName)
     }
   }
 
-  // 获取插件 API
   // TODO 校验入参
+  /** 获取插件 API
+   * @template T
+   * @param {string} pluginName 插件名称
+   * @memberof PluginHandler
+   */
   async api<T extends object>(pluginName: string) {
     const plugin = this.regedit.get(pluginName)
     if (plugin === undefined) {
@@ -170,7 +198,13 @@ class PluginHandler {
     }
   }
 
-  // 从 npm 搜索插件, 传入 streamFunc 可以流式处理
+  /**
+   * 从 npm 搜索插件
+   * 传入 streamFunc 可以流式处理
+   * @param {string} pluginName 插件名称
+   * @param {(data: Result) => void} [streamFunc] 流式处理钩子
+   * @memberof PluginHandler
+   */
   async search(pluginName: string, streamFunc?: (data: Result) => void) {
     return await new Promise<Result[]>((resolve, reject) => {
       const result: Result[] = []
@@ -188,7 +222,11 @@ class PluginHandler {
     })
   }
 
-  // 更新插件
+  /**
+   * 更新指定插件
+   * @param {...string[]} plugins 插件名称
+   * @memberof PluginHandler
+   */
   async update(...plugins: string[]) {
     await this.execCommand('update', plugins)
 
@@ -200,7 +238,11 @@ class PluginHandler {
     }
   }
 
-  // 卸载插件
+  /**
+   * 卸载指定插件
+   * @param {...string[]} plugins 插件名称
+   * @memberof PluginHandler
+   */
   async uninstall(...plugins: string[]) {
     for (const name of plugins) {
       // 停止插件运行
@@ -215,7 +257,10 @@ class PluginHandler {
     await this.execCommand('remove', plugins)
   }
 
-  // 列出所有已安装插件
+  /**
+   * 列出所有已安装插件
+   * @memberof PluginHandler
+   */
   async list() {
     const installInfo: IPackageJson = JSON.parse(
       await fs.readFile(`${this.baseDir}/package.json`, 'utf-8')
@@ -227,7 +272,10 @@ class PluginHandler {
     return plugins
   }
 
-  // 运行包管理器
+  /**
+   * 运行包管理器
+   * @memberof PluginHandler
+   */
   private async execCommand(cmd: string, modules: string[]): Promise<string> {
     let args: string[] = [cmd].concat(modules).concat('--color=always')
     if (cmd !== 'remove') args = args.concat(`--registry=${this.registry}`)
