@@ -81,7 +81,7 @@ pluginInstance.search('rubick-plugin-demo')
 
 系统插件可在构造函数 `constructor` 中设置插件配置, 配置参数均为**可选**参数
 
-插件所有输出都会被重定向到全局日志器中
+插件发布到 npm 上时前戳为 `rubick-plugin-`
 
 系统插件必须有几个生命周期函数:
 

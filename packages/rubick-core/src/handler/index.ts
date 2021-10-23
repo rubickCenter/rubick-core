@@ -103,6 +103,7 @@ class PluginHandler {
       await plugin.start()
       this.status.set(pluginName, 'RUNNING')
 
+      // TODO 校验 API 合法才算启动成功
       logger.info(`Plugin ${pluginName} started`)
       return plugin
     } catch (error) {
@@ -148,7 +149,7 @@ class PluginHandler {
   }
 
   // 获取插件 API
-  // TODO 中间件 + 校验
+  // TODO 校验入参
   async api<T extends object>(pluginName: string) {
     const plugin = this.regedit.get(pluginName)
     if (plugin === undefined) {
