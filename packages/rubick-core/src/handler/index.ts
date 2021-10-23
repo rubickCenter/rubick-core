@@ -61,6 +61,11 @@ class PluginHandler {
         options.pluginConfig[plugin]
       )
     }
+
+    // 加载内置插件
+    for (const plugin in options.pluginInit) {
+      this.startPluginInstance(plugin, options.pluginInit[plugin]) // eslint-disable-line
+    }
   }
 
   // 启动所有已安装插件
@@ -114,17 +119,29 @@ class PluginHandler {
     PluginFactory = PluginFactory.default ?? PluginFactory
 
     // 读取配置实例化插件对象
-    // TODO 根据插件文档校验参数
     const plugin: PluginClassType = new PluginFactory(
       this.config.get(pluginName) ?? {}
     )
 
+    return await this.startPluginInstance(pluginName, plugin)
+  }
+
+  /**
+   * 启动插件实例
+   * @template T 插件类型
+   * @param {string} pluginName 插件名称
+   * @param {T} plugin 插件实例
+   * @memberof PluginHandler
+   */
+  async startPluginInstance<T extends RubickPlugin<object>>(
+    pluginName: string,
+    plugin: T
+  ) {
     try {
       // 启动插件
       await plugin.start()
       this.status.set(pluginName, 'RUNNING')
 
-      // TODO 校验 API 合法才算启动成功
       logger.info(`Plugin ${pluginName} started`)
       return plugin
     } catch (error) {
@@ -176,7 +193,6 @@ class PluginHandler {
     }
   }
 
-  // TODO 校验入参
   /** 获取插件 API
    * @template T
    * @param {string} pluginName 插件名称

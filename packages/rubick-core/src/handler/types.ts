@@ -17,6 +17,7 @@ import {
 export interface PluginHandlerOptions {
   baseDir: string
   registry?: string
+  pluginInit?: { [pluginName: string]: RubickPlugin<object> }
   pluginConfig?: { [pluginName: string]: object }
   loglevel?: LogLevel
   loggerReporter?: (
