@@ -44,7 +44,9 @@ export interface RubickPlugin {
  * @export
  * @interface PluginInfo
  */
-export interface PluginInfo {}
+export interface PluginInfo {
+  todo: string
+}
 
 // 插件运行状态
 export type PluginStatus = 'RUNNING' | 'STOPED' | 'ERROR'
