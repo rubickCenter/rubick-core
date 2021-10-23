@@ -33,11 +33,14 @@ export interface PluginHandlerOptions {
  * @export
  * @interface RubickPlugin
  */
-export interface RubickPlugin {
+export interface RubickPlugin<T extends object> {
   start: () => Promise<void>
   stop: () => Promise<void>
-  api: () => Promise<object>
+  api: () => Promise<T>
 }
+
+export type PromiseReturnType<T extends (...args: any) => Promise<any>> =
+  T extends (...args: any) => Promise<infer R> ? R : any
 
 /**
  * 插件信息, 对应 plugin.json
@@ -52,4 +55,4 @@ export interface PluginInfo {
 export type PluginStatus = 'RUNNING' | 'STOPED' | 'ERROR'
 
 // 插件注册表
-export interface PluginRegedit extends Map<string, RubickPlugin> {}
+export interface PluginRegedit extends Map<string, RubickPlugin<object>> {}

@@ -3,7 +3,8 @@ import {
   PluginRegedit,
   RubickPlugin,
   PluginStatus,
-  PluginInfo
+  PluginInfo,
+  PromiseReturnType
 } from './types'
 import execa from 'execa'
 import fs from 'fs-extra'
@@ -93,10 +94,13 @@ class PluginHandler {
 
   /**
    * 启动插件
+   * @template T
    * @param {string} pluginName 插件名称
    * @memberof PluginHandler
    */
-  async start(pluginName: string): Promise<RubickPlugin | undefined> {
+  async start<PluginClassType extends RubickPlugin<object>>(
+    pluginName: string
+  ): Promise<PluginClassType | undefined> {
     const pluginPath = path.resolve(this.baseDir, 'node_modules', pluginName)
     if (!(await fs.pathExists(pluginPath))) {
       logger.error(`No such plugin ${pluginName}, install it first!`)
@@ -111,7 +115,7 @@ class PluginHandler {
 
     // 读取配置实例化插件对象
     // TODO 根据插件文档校验参数
-    const plugin: RubickPlugin = new PluginFactory(
+    const plugin: PluginClassType = new PluginFactory(
       this.config.get(pluginName) ?? {}
     )
 
@@ -178,13 +182,19 @@ class PluginHandler {
    * @param {string} pluginName 插件名称
    * @memberof PluginHandler
    */
-  async api<T extends object>(pluginName: string) {
-    const plugin = this.regedit.get(pluginName)
+  async api<
+    PluginClassType extends RubickPlugin<
+      PromiseReturnType<PluginClassType['api']>
+    >
+  >(
+    pluginName: string
+  ): Promise<PromiseReturnType<PluginClassType['api']> | undefined> {
+    const plugin = this.regedit.get(pluginName) as PluginClassType | undefined
     if (plugin === undefined) {
       logger.error(`No such plugin ${pluginName}, install it first!`)
       return
     }
-    return (await plugin.api()) as T
+    return await plugin.api()
   }
 
   // 安装并启动插件
