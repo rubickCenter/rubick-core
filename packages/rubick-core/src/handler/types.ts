@@ -40,8 +40,8 @@ export interface RubickPlugin<T extends object> {
   api: () => Promise<T>
 }
 
-export type PromiseReturnType<T extends (...args: any) => Promise<any>> =
-  T extends (...args: any) => Promise<infer R> ? R : any
+export type PromiseReturnType<T extends () => Promise<object>> =
+  T extends () => Promise<infer R> ? R : object
 
 /**
  * 插件信息, 对应 plugin.json

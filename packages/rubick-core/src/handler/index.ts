@@ -21,7 +21,7 @@ import { RubickError } from './error'
  */
 class PluginHandler {
   private readonly regedit: PluginRegedit = new Map()
-  private readonly pluginInit
+  private readonly pluginInit: { [x: string]: RubickPlugin<object> }
 
   // 插件安装地址
   baseDir: string
