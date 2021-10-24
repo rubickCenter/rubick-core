@@ -40,7 +40,7 @@ describe('PluginHandler', () => {
   })
 
   test('Stop all Plugin', async () => {
-    await pluginInstance.stopAll()
+    await pluginInstance.stop('rubick-plugin-db')
     expect(pluginInstance.status.get('rubick-plugin-db')).toBe('STOPED')
   })
 

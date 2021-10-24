@@ -13,6 +13,7 @@ import { IPackageJson, IDependency } from '@ts-type/package-dts/package-json'
 import path from 'path'
 import got from 'got'
 import logger from './logger'
+import { RubickError } from './error'
 
 /**
  * 插件管理器
@@ -74,20 +75,12 @@ class PluginHandler {
     return this
   }
 
-  // 启动所有已安装插件
-  async startAll() {
-    const pluginList = await this.list()
-    for (const plugin of pluginList) {
-      await this.start(plugin)
-    }
-  }
-
   /**
    * 关闭注册表中指定插件
    * @param {string} pluginName 插件名称
    * @memberof PluginHandler
    */
-  async stop(pluginName: string) {
+  async stop(pluginName: string): Promise<undefined | RubickError> {
     const plugin = this.regedit.get(pluginName)
     if (plugin !== undefined && this.status.get(pluginName) === 'RUNNING') {
       try {
@@ -95,7 +88,8 @@ class PluginHandler {
         this.status.set(pluginName, 'STOPED')
         logger.info(`Plugin ${pluginName} stoped`)
       } catch (error) {
-        logger.error(
+        return new RubickError(
+          'PluginStopError',
           `Someing went wrong when stop plugin ${pluginName}: `,
           error as Error
         )
@@ -109,27 +103,32 @@ class PluginHandler {
    * @param {string} pluginName 插件名称
    * @memberof PluginHandler
    */
-  async start<PluginClassType extends RubickPlugin<object>>(
+  async start<
+    PluginClassType extends RubickPlugin<
+      PromiseReturnType<PluginClassType['api']>
+    >
+  >(
     pluginName: string
-  ): Promise<PluginClassType | undefined> {
+  ): Promise<PromiseReturnType<PluginClassType['api']> | RubickError> {
     const pluginPath = path.resolve(this.baseDir, 'node_modules', pluginName)
-    if (!(await fs.pathExists(pluginPath))) {
-      logger.error(`No such plugin ${pluginName}, install it first!`)
-      return
+    if (await fs.pathExists(pluginPath)) {
+      // 动态引入插件
+      let PluginFactory = await import(pluginPath)
+
+      // 兼容 cjs 和 esm
+      PluginFactory = PluginFactory.default ?? PluginFactory
+
+      // 读取配置实例化插件对象
+      const plugin: PluginClassType = new PluginFactory(
+        this.config.get(pluginName) ?? {}
+      )
+      return await this.startPluginInstance(pluginName, plugin)
+    } else {
+      return new RubickError(
+        'PluginNotFoundError',
+        `No such plugin ${pluginName}, install it first!`
+      )
     }
-
-    // 动态引入插件
-    let PluginFactory = await import(pluginPath)
-
-    // 兼容 cjs 和 esm
-    PluginFactory = PluginFactory.default ?? PluginFactory
-
-    // 读取配置实例化插件对象
-    const plugin: PluginClassType = new PluginFactory(
-      this.config.get(pluginName) ?? {}
-    )
-
-    return await this.startPluginInstance(pluginName, plugin)
   }
 
   /**
@@ -139,23 +138,30 @@ class PluginHandler {
    * @param {T} plugin 插件实例
    * @memberof PluginHandler
    */
-  async startPluginInstance<T extends RubickPlugin<object>>(
+  async startPluginInstance<
+    PluginClassType extends RubickPlugin<
+      PromiseReturnType<PluginClassType['api']>
+    >
+  >(
     pluginName: string,
-    plugin: T
-  ) {
+    plugin: PluginClassType
+  ): Promise<PromiseReturnType<PluginClassType['api']> | RubickError> {
+    // 注册插件
+    this.regedit.set(pluginName, plugin)
     try {
       // 启动插件
       await plugin.start()
       this.status.set(pluginName, 'RUNNING')
 
       logger.info(`Plugin ${pluginName} started`)
-      return plugin
+      return await plugin.api()
     } catch (error) {
       this.status.set(pluginName, 'ERROR')
-      logger.error(`Start plugin ${pluginName} with error: `, error as Error)
-    } finally {
-      // 注册插件
-      this.regedit.set(pluginName, plugin)
+      return new RubickError(
+        'PluginStartError',
+        `Start plugin ${pluginName} with error: `,
+        error as Error
+      )
     }
   }
 
@@ -164,7 +170,7 @@ class PluginHandler {
    * @param {string} pluginName 插件名称
    * @memberof PluginHandler
    */
-  async getPluginInfo(pluginName: string) {
+  async getPluginInfo(pluginName: string): Promise<PluginInfo | RubickError> {
     let pluginInfo: PluginInfo
     const pluginJSONPath = path.resolve(
       this.baseDir,
@@ -189,16 +195,6 @@ class PluginHandler {
     return pluginInfo
   }
 
-  /**
-   * 关闭所有插件
-   * @memberof PluginHandler
-   */
-  async stopAll() {
-    for (const [pluginName] of this.regedit) {
-      await this.stop(pluginName)
-    }
-  }
-
   /** 获取插件 API
    * @template T
    * @param {string} pluginName 插件名称
@@ -210,13 +206,16 @@ class PluginHandler {
     >
   >(
     pluginName: string
-  ): Promise<PromiseReturnType<PluginClassType['api']> | undefined> {
+  ): Promise<PromiseReturnType<PluginClassType['api']> | RubickError> {
     const plugin = this.regedit.get(pluginName) as PluginClassType | undefined
-    if (plugin === undefined) {
-      logger.error(`No such plugin ${pluginName}, install it first!`)
-      return
+    if (plugin !== undefined) {
+      return await plugin.api()
+    } else {
+      return new RubickError(
+        'PluginNotFoundError',
+        `No such plugin ${pluginName}, install it first!`
+      )
     }
-    return await plugin.api()
   }
 
   // 安装并启动插件
@@ -308,7 +307,10 @@ class PluginHandler {
    * 运行包管理器
    * @memberof PluginHandler
    */
-  private async execCommand(cmd: string, modules: string[]): Promise<string> {
+  private async execCommand(
+    cmd: string,
+    modules: string[]
+  ): Promise<string | RubickError> {
     let args: string[] = [cmd].concat(modules).concat('--color=always')
     if (cmd !== 'remove') args = args.concat(`--registry=${this.registry}`)
     const { stdout, stderr } = await execa(
@@ -320,7 +322,7 @@ class PluginHandler {
     )
     logger.debug(stdout)
     if (stderr !== '') {
-      logger.error(stderr)
+      return new RubickError('PackageManagerError', stderr)
     }
     return stdout
   }
