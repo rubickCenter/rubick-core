@@ -20,6 +20,8 @@ import logger from './logger'
  */
 class PluginHandler {
   private readonly regedit: PluginRegedit = new Map()
+  private readonly pluginInit
+
   // 插件安装地址
   baseDir: string
   // 插件源地址
@@ -42,6 +44,7 @@ class PluginHandler {
     }
     this.baseDir = options.baseDir
     this.registry = options.registry ?? 'https://registry.npm.taobao.org'
+    this.pluginInit = options.pluginInit ?? {}
 
     // 自定义日志级别
     if (options.loglevel !== undefined) logger.level = options.loglevel
@@ -61,11 +64,14 @@ class PluginHandler {
         options.pluginConfig[plugin]
       )
     }
+  }
 
-    // 加载内置插件
-    for (const plugin in options.pluginInit) {
-      this.startPluginInstance(plugin, options.pluginInit[plugin]) // eslint-disable-line
+  // 启动并加载内置插件
+  async _init() {
+    for (const plugin in this.pluginInit) {
+      await this.startPluginInstance(plugin, this.pluginInit[plugin])
     }
+    return this
   }
 
   // 启动所有已安装插件
@@ -320,4 +326,9 @@ class PluginHandler {
   }
 }
 
-export default PluginHandler
+const newPluginHandler = async (options: PluginHandlerOptions) => {
+  return await new PluginHandler(options)._init()
+}
+
+export { PluginHandler }
+export default newPluginHandler

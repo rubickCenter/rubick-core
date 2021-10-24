@@ -1,20 +1,24 @@
-import { PluginHandler } from '../src'
+import { newPluginHandler, PluginHandler } from '../src'
 import path from 'path'
 import os from 'os'
 import { env } from 'process'
 
-const pluginDic = path.join(os.tmpdir(), 'test-' + Date.now().toString())
-
-const pluginInstance = new PluginHandler({
-  baseDir: pluginDic,
+const pluginHandlerConfig = {
+  baseDir: path.join(os.tmpdir(), 'test-' + Date.now().toString()),
   registry:
     env.ACTION === undefined
       ? 'https://registry.npm.taobao.org'
       : 'https://registry.npmjs.org/',
   loglevel: 5
-})
+}
 
 describe('PluginHandler', () => {
+  let pluginInstance: PluginHandler
+
+  test('New plugin handler instance', async () => {
+    pluginInstance = await newPluginHandler(pluginHandlerConfig)
+  })
+
   test('Search Plugin', async () => {
     await pluginInstance.search('rubick-plugin-db', r => {
       expect(r.name).toBe('rubick-plugin-db')
