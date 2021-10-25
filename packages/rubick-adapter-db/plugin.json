@@ -1,0 +1,10 @@
+{
+  "pluginName": "rubick-adapter-db",
+  "author": "rubickCenter",
+  "description": "rubick 的数据库系统插件, 基于 pouchdb",
+  "main": "dist/index.ts",
+  "version": "0.0.2",
+  "logo": "logo.png",
+  "name": "rubick-core",
+  "features": []
+}

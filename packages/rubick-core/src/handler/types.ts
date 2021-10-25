@@ -49,7 +49,14 @@ export type PromiseReturnType<T extends () => Promise<object>> =
  * @interface AdapterInfo
  */
 export interface AdapterInfo {
-  todo: string
+  pluginName: string
+  author: string
+  description: string
+  main: string
+  version: string
+  logo: string
+  name: string
+  features: object[]
 }
 
 // 插件运行状态

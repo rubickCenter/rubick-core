@@ -1,6 +1,6 @@
 {
-  "name": "rubick-plugin-db",
-  "version": "0.0.2-24",
+  "name": "rubick-adapter-db",
+  "version": "0.0.2-25",
   "description": "rubick core api",
   "author": "muwoo",
   "main": "dist/index.js",
@@ -28,6 +28,7 @@
     "@types/pouchdb": "^6.4.0"
   },
   "files": [
-    "dist"
+    "dist",
+    "plugin.json"
   ]
 }

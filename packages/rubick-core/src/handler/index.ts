@@ -169,7 +169,7 @@ class AdapterHandler {
   }
 
   /**
-   * 获取插件信息、配置文档和API文档
+   * 获取插件信息
    * @param {string} adapter 插件名称
    * @memberof PluginHandler
    */
