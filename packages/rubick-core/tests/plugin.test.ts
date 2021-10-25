@@ -1,9 +1,9 @@
-import { newPluginHandler, PluginHandler } from '../src'
+import { newAdapterHandler, AdapterHandler } from '../src'
 import path from 'path'
 import os from 'os'
 import { env } from 'process'
 
-const pluginHandlerConfig = {
+const adapterHandlerConfig = {
   baseDir: path.join(os.tmpdir(), 'test-' + Date.now().toString()),
   registry:
     env.ACTION === undefined
@@ -12,40 +12,42 @@ const pluginHandlerConfig = {
   loglevel: 5
 }
 
-describe('PluginHandler', () => {
-  let pluginInstance: PluginHandler
+describe('AdapterHandler', () => {
+  let adapterInstance: AdapterHandler
 
-  test('New plugin handler instance', async () => {
-    pluginInstance = await newPluginHandler(pluginHandlerConfig)
+  test('New adapter handler instance', async () => {
+    adapterInstance = await newAdapterHandler(adapterHandlerConfig)
   })
 
-  test('Search Plugin', async () => {
-    await pluginInstance.search('rubick-plugin-db', r => {
-      expect(r.name).toBe('rubick-plugin-db')
+  test('Search adapter', async () => {
+    await adapterInstance.search('rubick-adapter-db', r => {
+      expect(r.name).toBe('rubick-adapter-db')
     })
   }, 30000)
 
-  test('Install Plugin', async () => {
-    await pluginInstance.install('rubick-plugin-db')
-    expect((await pluginInstance.list())[0]).toBe('rubick-plugin-db')
+  test('Install adapter', async () => {
+    await adapterInstance.install('rubick-adapter-db')
+    expect((await adapterInstance.list())[0]).toBe('rubick-adapter-db')
   }, 30000)
 
-  test('Update Plugin', async () => {
-    await pluginInstance.update('rubick-plugin-db')
-    expect((await pluginInstance.list())[0]).toBe('rubick-plugin-db')
+  test('Update adapter', async () => {
+    await adapterInstance.update('rubick-adapter-db')
+    expect((await adapterInstance.list())[0]).toBe('rubick-adapter-db')
   }, 30000)
 
-  test('Get Plugin API', async () => {
-    expect(typeof (await pluginInstance.api('rubick-plugin-db'))).toBe('object')
+  test('Get adapter API', async () => {
+    expect(typeof (await adapterInstance.api('rubick-adapter-db'))).toBe(
+      'object'
+    )
   })
 
-  test('Stop all Plugin', async () => {
-    await pluginInstance.stop('rubick-plugin-db')
-    expect(pluginInstance.status.get('rubick-plugin-db')).toBe('STOPED')
+  test('Stop all adapter', async () => {
+    await adapterInstance.stop('rubick-adapter-db')
+    expect(adapterInstance.status.get('rubick-adapter-db')).toBe('STOPED')
   })
 
-  test('Uninstall Plugin', async () => {
-    await pluginInstance.uninstall('rubick-plugin-db')
-    expect((await pluginInstance.list()).length).toBe(0)
+  test('Uninstall adapter', async () => {
+    await adapterInstance.uninstall('rubick-adapter-db')
+    expect((await adapterInstance.list()).length).toBe(0)
   })
 })

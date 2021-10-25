@@ -2,10 +2,10 @@ import logger from './logger'
 
 type ErrorType =
   | 'PackageManagerError'
-  | 'PluginNotFoundError'
-  | 'PluginGetAPIError'
-  | 'PluginStopError'
-  | 'PluginStartError'
+  | 'AdapterNotFoundError'
+  | 'AdapterGetAPIError'
+  | 'AdapterStopError'
+  | 'AdapterStartError'
   | 'UnknownError'
 
 export class RubickError extends Error {

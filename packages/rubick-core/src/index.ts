@@ -1,4 +1,4 @@
-import newPluginHandler, { PluginHandler } from './handler'
+import newAdapterHandler, { AdapterHandler } from './handler'
 
-export type { PluginHandler }
-export { newPluginHandler }
+export type { AdapterHandler }
+export { newAdapterHandler }

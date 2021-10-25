@@ -12,13 +12,13 @@ import {
  * @param loglevel 日志级别
  * @function loggerReporter 日志记录钩子
  * @export
- * @interface PluginHandlerOptions
+ * @interface AdapterHandlerOptions
  */
-export interface PluginHandlerOptions {
+export interface AdapterHandlerOptions {
   baseDir: string
   registry?: string
-  pluginInit?: { [pluginName: string]: RubickPlugin<object> }
-  pluginConfig?: { [pluginName: string]: object }
+  adapterInit?: { [pluginName: string]: RubickAdapter<object> }
+  adapterConfig?: { [pluginName: string]: object }
   loglevel?: LogLevel
   loggerReporter?: (
     logObj: ConsolaReporterLogObject,
@@ -32,9 +32,9 @@ export interface PluginHandlerOptions {
  * @function stop 插件关闭
  * @function api 插件获取API
  * @export
- * @interface RubickPlugin
+ * @interface RubickAdapter
  */
-export interface RubickPlugin<T extends object> {
+export interface RubickAdapter<T extends object> {
   start: () => Promise<void>
   stop: () => Promise<void>
   api: () => Promise<T>
@@ -46,14 +46,14 @@ export type PromiseReturnType<T extends () => Promise<object>> =
 /**
  * 插件信息, 对应 plugin.json
  * @export
- * @interface PluginInfo
+ * @interface AdapterInfo
  */
-export interface PluginInfo {
+export interface AdapterInfo {
   todo: string
 }
 
 // 插件运行状态
-export type PluginStatus = 'RUNNING' | 'STOPED' | 'ERROR'
+export type AdapterStatus = 'RUNNING' | 'STOPED' | 'ERROR'
 
 // 插件注册表
-export interface PluginRegedit extends Map<string, RubickPlugin<object>> {}
+export interface AdapterRegedit extends Map<string, RubickAdapter<object>> {}
