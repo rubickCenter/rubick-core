@@ -173,7 +173,7 @@ class AdapterHandler {
    * @param {string} adapter 插件名称
    * @memberof PluginHandler
    */
-  async getAdapterInfo(adapter: string): Promise<AdapterInfo | RubickError> {
+  async getAdapterInfo(adapter: string): Promise<AdapterInfo> {
     let adapterInfo: AdapterInfo
     const infoPath = path.resolve(
       this.baseDir,
@@ -189,11 +189,11 @@ class AdapterHandler {
     } else {
       logger.info(`No local adapter found fetch info from jsdelivr`)
       // 本地没有从远程获取
-      const { data } = await got
-        .get(`https://cdn.jsdelivr.net/npm/${adapter}/plugin.json`)
-        .json()
+      const resp = await got.get(
+        `https://cdn.jsdelivr.net/npm/${adapter}/plugin.json`
+      )
       // Todo 校验合法性
-      adapterInfo = data as AdapterInfo
+      adapterInfo = JSON.parse(resp.body) as AdapterInfo
     }
     return adapterInfo
   }

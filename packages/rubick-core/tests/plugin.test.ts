@@ -25,6 +25,11 @@ describe('AdapterHandler', () => {
     })
   }, 30000)
 
+  test('Get adapter info', async () => {
+    const info = await adapterInstance.getAdapterInfo('rubick-adapter-db')
+    expect(info.pluginName).toBe('rubick-adapter-db')
+  }, 30000)
+
   test('Install adapter', async () => {
     await adapterInstance.install('rubick-adapter-db')
     expect((await adapterInstance.list())[0]).toBe('rubick-adapter-db')
