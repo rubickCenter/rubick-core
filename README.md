@@ -53,6 +53,8 @@ export default class MyAdapter {
 
 ## rubickcore 接入文档
 
+[这里](./examples/rubick-core-example)有一个基本使用示例
+
 ### 系统插件类 `Class AdapterHandler`
 
 ```js
