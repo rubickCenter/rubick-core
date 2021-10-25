@@ -80,7 +80,7 @@ class AdapterHandler {
    * @param {string} adapter 插件名称
    * @memberof AdapterHandler
    */
-  async stop(adapter: string): Promise<undefined | RubickError> {
+  async stop(adapter: string) {
     const adapterInstance = this.regedit.get(adapter)
     if (
       adapterInstance !== undefined &&
@@ -91,7 +91,7 @@ class AdapterHandler {
         this.status.set(adapter, 'STOPED')
         logger.info(`Adapter ${adapter} stoped`)
       } catch (error) {
-        return new RubickError(
+        throw new RubickError(
           'AdapterStopError',
           `Someing went wrong when stop adapter ${adapter}: `,
           error as Error
@@ -110,9 +110,7 @@ class AdapterHandler {
     AdapterClassType extends RubickAdapter<
       PromiseReturnType<AdapterClassType['api']>
     >
-  >(
-    adapter: string
-  ): Promise<PromiseReturnType<AdapterClassType['api']> | RubickError> {
+  >(adapter: string): Promise<PromiseReturnType<AdapterClassType['api']>> {
     const adapterPath = path.resolve(this.baseDir, 'node_modules', adapter)
     if (await fs.pathExists(adapterPath)) {
       // 动态引入插件
@@ -127,7 +125,7 @@ class AdapterHandler {
       )
       return await this.startAdapterInstance(adapter, adapterInstance)
     } else {
-      return new RubickError(
+      throw new RubickError(
         'AdapterNotFoundError',
         `No such adapter ${adapter}, install it first!`
       )
@@ -148,7 +146,7 @@ class AdapterHandler {
   >(
     adapter: string,
     adapterInstance: AdapterClassType
-  ): Promise<PromiseReturnType<AdapterClassType['api']> | RubickError> {
+  ): Promise<PromiseReturnType<AdapterClassType['api']>> {
     // 注册插件
     this.regedit.set(adapter, adapterInstance)
     try {
@@ -160,7 +158,7 @@ class AdapterHandler {
       return await adapterInstance.api()
     } catch (error) {
       this.status.set(adapter, 'ERROR')
-      return new RubickError(
+      throw new RubickError(
         'AdapterStartError',
         `Start adapter ${adapter} with error: `,
         error as Error
@@ -207,16 +205,14 @@ class AdapterHandler {
     AdapterClassType extends RubickAdapter<
       PromiseReturnType<AdapterClassType['api']>
     >
-  >(
-    adapterName: string
-  ): Promise<PromiseReturnType<AdapterClassType['api']> | RubickError> {
+  >(adapterName: string): Promise<PromiseReturnType<AdapterClassType['api']>> {
     const adapterInstance = this.regedit.get(adapterName) as
       | AdapterClassType
       | undefined
     if (adapterInstance !== undefined) {
       return await adapterInstance.api()
     } else {
-      return new RubickError(
+      throw new RubickError(
         'AdapterNotFoundError',
         `No such adapter ${adapterName}, install it first!`
       )
@@ -312,10 +308,7 @@ class AdapterHandler {
    * 运行包管理器
    * @memberof AdapterHandler
    */
-  private async execCommand(
-    cmd: string,
-    modules: string[]
-  ): Promise<string | RubickError> {
+  private async execCommand(cmd: string, modules: string[]): Promise<string> {
     let args: string[] = [cmd].concat(modules).concat('--color=always')
     if (cmd !== 'remove') args = args.concat(`--registry=${this.registry}`)
     const { stdout, stderr } = await execa(
@@ -327,7 +320,7 @@ class AdapterHandler {
     )
     logger.debug(stdout)
     if (stderr !== '') {
-      return new RubickError('PackageManagerError', stderr)
+      throw new RubickError('PackageManagerError', stderr)
     }
     return stdout
   }
