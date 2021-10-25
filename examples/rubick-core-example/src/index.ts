@@ -7,7 +7,7 @@ import {
 import db from '../../../packages/rubick-adapter-db/src'
 
 // 这是预加载的内置插件
-// 如果需要动态安装插件请看 rubick-core 中的示例
+// 如果需要动态安装插件请看 packages/rubick-core/tests/plugin.test.ts 中的示例
 // 创建 db 插件实例
 const adapterDB = new db<string>({
   dbPath: 'tmp'
