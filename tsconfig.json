@@ -1,13 +1,10 @@
 {
-  "include": ["src/**/*"],
-  "exclude": ["**/example", "**/node_modules", "**/dist"],
+  "include": ["packages"],
+  "exclude": ["**/example", "**/node_modules", "**/dist", "**/test"],
   "compilerOptions": {
-    "target": "es2017",
-    "lib": [
-      "es2017",
-      "es2015",
-      "es6"
-    ],
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "rootDir": ".",
     "module": "commonjs",
     "declaration": true,
     "sourceMap": true,

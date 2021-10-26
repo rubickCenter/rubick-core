@@ -1,0 +1,34 @@
+{
+  "name": "rubick-adapter-db",
+  "version": "0.0.2-25",
+  "description": "rubick core api",
+  "author": "muwoo",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "homepage": "https://github.com/rubickCenter/rubick-core#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubickCenter/rubick-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rubickCenter/rubick-core/issues"
+  },
+  "scripts": {
+    "prepack": "bob-esbuild build --clean",
+    "test": "cd ../.. && npm run test",
+    "lint": "cd ../.. && npm run lint"
+  },
+  "dependencies": {
+    "fs-extra": "^10.0.0",
+    "pouchdb": "^7.2.2",
+    "pouchdb-adapter-rocksdb2": "^1.0.5"
+  },
+  "devDependencies": {
+    "@types/pouchdb": "^6.4.0"
+  },
+  "files": [
+    "dist",
+    "plugin.json"
+  ]
+}

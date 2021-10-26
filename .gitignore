@@ -8,3 +8,4 @@ Thumbs.db
 ./test/plugin
 tests/tmp
 **/pnpm-lock.yaml
+**/tmp

@@ -1,12 +1,68 @@
-## API 设计
+# RubickCore
 
-### 插件类 `Class PluginHandler`
+rubick 的插件能力系统
+
+rubickcore 可通过安装系统插件, 动态获得任何能力, 以此驱动 rubick 创造无限可能
+
+rubick 的底层能力由以下系统插件提供:
+
+1. [rubick-adapter-db](./packages/rubick-adapter-db) 提供本地数据储存
+2. [rubick-adapter-appsearch](./packages/rubick-adapter-appsearch) 提供系统应用搜索
+3. [rubick-adapter-nut](./packages/rubick-adapter-nut) 提供模拟和截图功能
+
+## 系统插件开发
+
+你可以使用 [rubick-cli](https://github.com/rubickCenter/rubick-cli) 来基于模版自动初始化项目
+
+系统插件开发有以下几个约定:
+
+1. 系统插件需要在入口文件暴露为默认导出对象，且必须有几个生命周期函数:
+
+| 函数名称 | 作用                 |
+| -------- | -------------------- |
+| start    | · 启动插件时被调用   |
+| stop     | · 关闭插件时被调用   |
+| api      | · 获取插件功能时调用 |
+
+2. 系统插件配置可在构造函数 `constructor` 中设置, 配置参数均为**可选**参数
+
+3. 插件包名前戳为 `rubick-adapter-`
+
+**eg:**
 
 ```js
-const { PluginHandler } = require('@rubick/rubick-core')
+export default class MyAdapter {
+  constructor(options: { dbPath?: string, dbName?: string }) {
+    if (dbPath === undefined) throw new Error('必须指定参数 dbPath')
+    this.options = options
+  }
 
-const pluginInstance = new PluginHandler({
-  baseDir: path.join(__dirname, './plugin')
+  async start() {
+    this.localdb = new Localdb(this.opt)
+  }
+
+  async stop() {
+    await this.localdb.stop()
+  }
+
+  async api() {
+    return await this.localdb.api()
+  }
+}
+```
+
+## rubickcore 接入文档
+
+[这里](./examples/rubick-core-example)有一个基本使用示例
+
+### 系统插件类 `Class AdapterHandler`
+
+```js
+const { newAdapterHandler } = require('@rubick/rubick-core')
+
+const rubickcore = newAdapterHandler({
+  // 插件安装目录
+  baseDir: path.join(__dirname, './adapter')
 })
 ```
 
@@ -17,13 +73,13 @@ const pluginInstance = new PluginHandler({
 从 `npm` 上安装插件
 
 ```js
-pluginInstance.install(plugins)
+rubickcore.install(adapter1, adapter2, adapter3)
 ```
 
 **eg:**
 
 ```js
-pluginInstance.install(['rubick-plugin-demo'])
+rubickcore.install('rubick-adapter-db')
 ```
 
 ##### 2. uninstall
@@ -31,13 +87,13 @@ pluginInstance.install(['rubick-plugin-demo'])
 卸载插件
 
 ```js
-pluginInstance.uninstall(plugins)
+rubickcore.uninstall(adapter1, adapter2, adapter3)
 ```
 
 **eg:**
 
 ```js
-pluginInstance.uninstall(['rubick-plugin-demo'])
+rubickcore.uninstall('rubick-adapter-db')
 ```
 
 ##### 3. update
@@ -45,50 +101,41 @@ pluginInstance.uninstall(['rubick-plugin-demo'])
 更新插件，需带具体的版本号
 
 ```js
-pluginInstance.update(plugins)
+rubickcore.update(adapter1, adapter2, adapter3)
 ```
 
 **eg:**
 
 ```js
-pluginInstance.update(['rubick-plugin-demo@0.1.1'])
+rubickcore.update('rubick-adapter-db@0.0.2')
 ```
 
-### 系统插件使用 `Class SysPluginHandler`
+##### 4. search
 
-系统插件生存于 `rubick` 工具的完整生命周期，也就是说只要 `rubick` 在使用，
-系统插件也会一直运行。
+搜索插件
 
 ```js
-const { SysPluginHandler } = require('@rubick/rubick-core')
-
-const sysPluginHandler = new SysPluginHandler(options)
+rubickcore.search(adapter)
 ```
 
-#### 实例方法
-
-##### 1. register
-
-将插件注册到系统
+**eg:**
 
 ```js
-sysPluginHandler.register(pluginName, pluginPath)
+rubickcore.search('rubick-adapter-db')
 ```
 
-##### 2. mainLoad
+##### 5. api
 
-主进程运行系统插件所有主进程函数，该方法在主进程中调用
+获取插件能力
 
 ```js
-sysPluginHandler.mainLoad()
+rubickcore.api(adapter)
 ```
 
-##### 2. rendererLoad
-
-渲染进程运行系统插件所有渲染进程函数，该方法在渲染进程中调用
+**eg:**
 
 ```js
-sysPluginHandler.rendererLoad()
+rubickcore.api('rubick-adapter-db')
 ```
 
 ## 贡献指南

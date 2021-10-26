@@ -1,0 +1,28 @@
+{
+  "name": "rubick-adapter-searchapp",
+  "version": "0.0.2-21",
+  "description": "rubick core api",
+  "author": "muwoo",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "homepage": "https://github.com/rubickCenter/rubick-core#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubickCenter/rubick-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rubickCenter/rubick-core/issues"
+  },
+  "scripts": {
+    "prepack": "bob-esbuild build --clean",
+    "test": "cd ../.. && npm run test",
+    "lint": "cd ../.. && npm run lint"
+  },
+  "dependencies": {
+    "get-mac-apps": "^1.0.2"
+  },
+  "files": [
+    "dist"
+  ]
+}
