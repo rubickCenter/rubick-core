@@ -16,19 +16,17 @@ rubick 的底层能力由以下系统插件提供:
 
 系统插件开发有以下几个约定:
 
-1. 系统插件需要在入口文件暴露插件对象
-
-2. 系统插件可在构造函数 `constructor` 中设置插件配置, 配置参数均为**可选**参数
-
-3. 插件包名前戳为 `rubick-adapter-`
-
-4. 系统插件必须有几个生命周期函数:
+1. 系统插件需要在入口文件暴露为默认导出对象，且必须有几个生命周期函数:
 
 | 函数名称 | 作用                 |
 | -------- | -------------------- |
 | start    | · 启动插件时被调用   |
 | stop     | · 关闭插件时被调用   |
 | api      | · 获取插件功能时调用 |
+
+2. 系统插件配置可在构造函数 `constructor` 中设置, 配置参数均为**可选**参数
+
+3. 插件包名前戳为 `rubick-adapter-`
 
 **eg:**
 
@@ -70,6 +68,8 @@ export default function MyAdapter(options: { param?: string }) {
 ```
 
 ## rubickcore 接入文档
+
+[这里](./examples/rubick-core-example)有一个基本使用示例
 
 ### 系统插件类 `Class AdapterHandler`
 
