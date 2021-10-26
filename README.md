@@ -32,23 +32,39 @@ rubick 的底层能力由以下系统插件提供:
 
 **eg:**
 
-```js
+类写法:
+
+```ts
 export default class MyAdapter {
-  constructor(options: { dbPath?: string, dbName?: string }) {
-    if (dbPath === undefined) throw new Error('必须指定参数 dbPath')
+  constructor(options: { param?: string }) {
+    if (param === undefined) throw new Error('必选参数可以抛出异常进行处理')
     this.options = options
   }
 
-  async start() {
-    this.localdb = new Localdb(this.opt)
-  }
-
-  async stop() {
-    await this.localdb.stop()
-  }
-
+  async start() {}
+  async stop() {}
   async api() {
-    return await this.localdb.api()
+    return {
+      function1: async () => {},
+      function2: async () => {}
+    }
+  }
+}
+```
+
+函数式写法:
+
+```ts
+export default function MyAdapter(options: { param?: string }) {
+  return {
+    start: async () => {},
+    stop: async () => {},
+    api: async () => {
+      return {
+        function1: async () => {},
+        function2: async () => {}
+      }
+    }
   }
 }
 ```
