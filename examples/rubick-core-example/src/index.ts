@@ -23,10 +23,10 @@ const adapterHandlerConfig: AdapterHandlerOptions = {
 
 async function main() {
   // 创建系统插件管理并初始化
-  const adapterInstance = await newAdapterHandler(adapterHandlerConfig)
+  const core = await newAdapterHandler(adapterHandlerConfig)
 
   // 获取 db 插件的能力API
-  const db = await adapterInstance.api<db<string>>('rubick-adapter-db')
+  const db = await core.api<db<string>>('rubick-adapter-db')
 
   // 插入一条数据
   await db.put('test', {
