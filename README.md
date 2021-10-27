@@ -28,18 +28,21 @@ rubick 的底层能力由以下系统插件提供:
 
 3. 插件包名前戳为 `rubick-adapter-`
 
+**不过这不会成为你编码的负担, 你可以像下面类例子里一样使用类型约束来获得自动提示**
+
 **eg:**
 
 类写法:
 
 ```ts
-export default class MyAdapter {
+export default class MyAdapter implements RubickAdapterClass<YourAPIInterface> {
   constructor(options: { param?: string }) {
     if (param === undefined) throw new Error('必选参数可以抛出异常进行处理')
     this.options = options
   }
 
-  async start() {}
+  // 通过 ctx 获得全局上下文
+  async start(ctx: Context) {}
   async stop() {}
   async api() {
     return {
@@ -53,9 +56,9 @@ export default class MyAdapter {
 函数式写法:
 
 ```ts
-export default function MyAdapter(options: { param?: string }) {
+export default function MyAdapter<RubickAdapter>(options: { param?: string }) {
   return {
-    start: async () => {},
+    start: async (ctx: Context) => {},
     stop: async () => {},
     api: async () => {
       return {

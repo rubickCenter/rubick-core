@@ -10,6 +10,7 @@ import {
  * @param registry 插件下载源 即 npm 源
  * @param pluginConfig 初始化插件配置
  * @param loglevel 日志级别
+ * @param customContext 自定义上下文对象
  * @function loggerReporter 日志记录钩子
  * @export
  * @interface AdapterHandlerOptions
@@ -20,18 +21,18 @@ export interface AdapterHandlerOptions {
   adapterInit?: { [pluginName: string]: RubickAdapter<object> }
   adapterConfig?: { [pluginName: string]: object }
   loglevel?: LogLevel
+  customContext?: object
   loggerReporter?: (
     logObj: ConsolaReporterLogObject,
     args: ConsolaReporterArgs
   ) => void
-  customContext?: object
 }
 
 /**
  * 全局上下文
- * version 版本
- * status 系统插件运行状态
- * api 动态访问其他系统插件的API
+ * @param version 版本
+ * @param status 系统插件运行状态
+ * @function api 动态访问其他系统插件的API
  * @export
  * @interface Context
  */
@@ -56,9 +57,21 @@ export interface Context {
  * @interface RubickAdapter
  */
 export interface RubickAdapter<API extends object> {
-  start: <CustomContext extends Context>(ctx?: CustomContext) => Promise<void>
+  start:
+    | (() => Promise<void>)
+    | (<CustomContext extends Context>(ctx: CustomContext) => Promise<void>)
   stop: () => Promise<void>
   api: () => Promise<API>
+}
+
+// 系统插件模版类型
+export abstract class RubickAdapterClass<API extends object>
+  implements RubickAdapter<API>
+{
+  constructor(_opt: AdapterHandlerOptions) {}
+  start!: RubickAdapter<API>['start']
+  stop!: RubickAdapter<API>['stop']
+  api!: RubickAdapter<API>['api']
 }
 
 export type PromiseReturnType<T extends () => Promise<object>> =
