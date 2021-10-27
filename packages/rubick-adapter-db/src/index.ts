@@ -1,5 +1,5 @@
 import Localdb from './localdb'
-import type { Context, RubickAdapterClass } from '../../rubick-core/src'
+import type { RubickAdapterClass } from '../../rubick-core/src'
 
 // TODO 生成插件文档
 export default class PluginDB<T> implements RubickAdapterClass<object> {
@@ -10,8 +10,7 @@ export default class PluginDB<T> implements RubickAdapterClass<object> {
     this.opt = opt
   }
 
-  async start(ctx: Context) {
-    console.log(ctx)
+  async start() {
     this.localdb ?? (this.localdb = new Localdb<T>(this.opt))
     await this.localdb.start()
   }

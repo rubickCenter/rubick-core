@@ -49,7 +49,7 @@ export interface Context {
 }
 
 /**
- * 插件接口
+ * 系统插件接口
  * @function start 插件启动
  * @function stop 插件关闭
  * @function api 插件获取API
@@ -57,14 +57,19 @@ export interface Context {
  * @interface RubickAdapter
  */
 export interface RubickAdapter<API extends object> {
-  start:
-    | (() => Promise<void>)
-    | (<CustomContext extends Context>(ctx: CustomContext) => Promise<void>)
+  start: <CustomContext extends Context>(ctx: CustomContext) => Promise<void>
   stop: () => Promise<void>
   api: () => Promise<API>
 }
 
-// 系统插件模版类型
+/**
+ * 系统插件类
+ * @export
+ * @abstract
+ * @class RubickAdapterClass
+ * @implements {RubickAdapter<API>}
+ * @template API
+ */
 export abstract class RubickAdapterClass<API extends object>
   implements RubickAdapter<API>
 {

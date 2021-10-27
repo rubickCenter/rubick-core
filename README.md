@@ -56,7 +56,9 @@ export default class MyAdapter implements RubickAdapterClass<YourAPIInterface> {
 函数式写法:
 
 ```ts
-export default function MyAdapter<RubickAdapter>(options: { param?: string }) {
+export default function MyAdapter(options: {
+  param?: string
+}): RubickAdapter<YourAPIInterface> {
   return {
     start: async (ctx: Context) => {},
     stop: async () => {},
