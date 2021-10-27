@@ -31,14 +31,14 @@ export interface AdapterHandlerOptions {
  * 全局上下文
  * version 版本
  * status 系统插件运行状态
- * getAPI 动态访问其他系统插件的API
+ * api 动态访问其他系统插件的API
  * @export
  * @interface Context
  */
 export interface Context {
   version: string
   status: Map<string, AdapterStatus>
-  getAPI: <
+  api: <
     AdapterClassType extends RubickAdapter<
       PromiseReturnType<AdapterClassType['api']>
     >
@@ -55,10 +55,10 @@ export interface Context {
  * @export
  * @interface RubickAdapter
  */
-export interface RubickAdapter<T extends object> {
-  start: <T extends Context>(ctx?: T) => Promise<void>
+export interface RubickAdapter<API extends object> {
+  start: <CustomContext extends Context>(ctx?: CustomContext) => Promise<void>
   stop: () => Promise<void>
-  api: () => Promise<T>
+  api: () => Promise<API>
 }
 
 export type PromiseReturnType<T extends () => Promise<object>> =
