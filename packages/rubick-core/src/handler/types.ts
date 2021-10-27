@@ -24,6 +24,27 @@ export interface AdapterHandlerOptions {
     logObj: ConsolaReporterLogObject,
     args: ConsolaReporterArgs
   ) => void
+  customContext?: object
+}
+
+/**
+ * 全局上下文
+ * version 版本
+ * status 系统插件运行状态
+ * getAPI 动态访问其他系统插件的API
+ * @export
+ * @interface Context
+ */
+export interface Context {
+  version: string
+  status: Map<string, AdapterStatus>
+  getAPI: <
+    AdapterClassType extends RubickAdapter<
+      PromiseReturnType<AdapterClassType['api']>
+    >
+  >(
+    adapterName: string
+  ) => Promise<PromiseReturnType<AdapterClassType['api']>>
 }
 
 /**
@@ -35,7 +56,7 @@ export interface AdapterHandlerOptions {
  * @interface RubickAdapter
  */
 export interface RubickAdapter<T extends object> {
-  start: () => Promise<void>
+  start: <T extends Context>(ctx?: T) => Promise<void>
   stop: () => Promise<void>
   api: () => Promise<T>
 }
