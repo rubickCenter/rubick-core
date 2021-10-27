@@ -1,6 +1,6 @@
 {
   "name": "rubick-core",
-  "version": "0.0.2-21",
+  "version": "0.1.0",
   "description": "rubick core api",
   "author": "rubick",
   "license": "",
@@ -53,8 +53,8 @@
         "in": "package.json",
         "out": [
           "packages/rubick-core/package.json",
-          "packages/rubick-plugin-db/package.json",
-          "packages/rubick-plugin-p2p/package.json"
+          "packages/rubick-adapter-db/package.json",
+          "packages/rubick-adapter-p2p/package.json"
         ]
       }
     },

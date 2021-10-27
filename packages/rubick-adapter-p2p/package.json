@@ -1,6 +1,6 @@
 {
   "name": "rubick-adapter-p2p",
-  "version": "0.0.2-21",
+  "version": "0.1.0",
   "description": "rubick core api",
   "author": "sovlookup",
   "main": "dist/index.js",

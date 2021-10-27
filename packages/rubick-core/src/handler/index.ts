@@ -20,17 +20,21 @@ import { RubickError } from './error'
  * @class AdapterHandler
  */
 class AdapterHandler {
+  static version: string = '0.1.0'
+
   private readonly regedit: AdapterRegedit = new Map()
   private readonly adapterInit: { [x: string]: RubickAdapter<object> }
 
+  // 初始化自定义上下文
+  private readonly customContext: object
+  // 插件运行状态
+  readonly status = new Map<string, AdapterStatus>()
   // 插件安装地址
-  baseDir: string
+  readonly baseDir: string
   // 插件源地址
-  registry: string
+  readonly registry: string
   // 插件配置
   config = new Map<string, object>()
-  // 插件状态
-  readonly status = new Map<string, AdapterStatus>()
 
   /**
    * Creates an instance of AdapterHandler.
@@ -46,6 +50,7 @@ class AdapterHandler {
     this.baseDir = options.baseDir
     this.registry = options.registry ?? 'https://registry.npm.taobao.org'
     this.adapterInit = options.adapterInit ?? {}
+    this.customContext = options.customContext ?? {}
 
     // 自定义日志级别
     if (options.loglevel !== undefined) logger.level = options.loglevel
@@ -150,8 +155,13 @@ class AdapterHandler {
     // 注册插件
     this.regedit.set(adapter, adapterInstance)
     try {
-      // 启动插件
-      await adapterInstance.start()
+      // 启动插件 传入上下文
+      await adapterInstance.start({
+        version: AdapterHandler.version,
+        status: this.status,
+        getAPI: (adapterName: string) => this.api(adapterName),
+        ...this.customContext
+      })
       this.status.set(adapter, 'RUNNING')
 
       logger.info(`Adapter ${adapter} started`)

@@ -1,6 +1,6 @@
 {
   "name": "rubick-adapter-db",
-  "version": "0.0.2-25",
+  "version": "0.1.0",
   "description": "rubick core api",
   "author": "muwoo",
   "main": "dist/index.js",
