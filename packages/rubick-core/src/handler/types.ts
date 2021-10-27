@@ -73,7 +73,10 @@ export interface RubickAdapter<API extends object> {
 export abstract class RubickAdapterClass<API extends object>
   implements RubickAdapter<API>
 {
-  constructor(_opt: AdapterHandlerOptions) {}
+  constructor(_opt: AdapterHandlerOptions) {
+    return this
+  }
+
   start!: RubickAdapter<API>['start']
   stop!: RubickAdapter<API>['stop']
   api!: RubickAdapter<API>['api']

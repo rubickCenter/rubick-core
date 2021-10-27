@@ -159,7 +159,7 @@ class AdapterHandler {
       await adapterInstance.start({
         version: AdapterHandler.version,
         status: this.status,
-        api: (adapterName: string) => this.api(adapterName),
+        api: async (adapterName: string) => await this.api(adapterName),
         ...this.customContext
       })
       this.status.set(adapter, 'RUNNING')
