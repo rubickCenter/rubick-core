@@ -79,9 +79,9 @@ export default function MyAdapter(options: {
 ### 系统插件类 `Class AdapterHandler`
 
 ```js
-const { newAdapterHandler } = require('@rubick/rubick-core')
+const { newAdapterHandler } = require('@rubickos/rubick-core')
 
-const rubickcore = newAdapterHandler({
+const core = newAdapterHandler({
   // 插件安装目录
   baseDir: path.join(__dirname, './adapter')
 })
@@ -94,13 +94,13 @@ const rubickcore = newAdapterHandler({
 从 `npm` 上安装插件
 
 ```js
-rubickcore.install(adapter1, adapter2, adapter3)
+core.install(adapter1, adapter2, adapter3)
 ```
 
 **eg:**
 
 ```js
-rubickcore.install('rubick-adapter-db')
+core.install('rubick-adapter-db')
 ```
 
 ##### 2. uninstall
@@ -108,13 +108,13 @@ rubickcore.install('rubick-adapter-db')
 卸载插件
 
 ```js
-rubickcore.uninstall(adapter1, adapter2, adapter3)
+core.uninstall(adapter1, adapter2, adapter3)
 ```
 
 **eg:**
 
 ```js
-rubickcore.uninstall('rubick-adapter-db')
+core.uninstall('rubick-adapter-db')
 ```
 
 ##### 3. update
@@ -122,13 +122,13 @@ rubickcore.uninstall('rubick-adapter-db')
 更新插件，需带具体的版本号
 
 ```js
-rubickcore.update(adapter1, adapter2, adapter3)
+core.update(adapter1, adapter2, adapter3)
 ```
 
 **eg:**
 
 ```js
-rubickcore.update('rubick-adapter-db@0.0.2')
+core.update('rubick-adapter-db@0.0.2')
 ```
 
 ##### 4. search
@@ -136,13 +136,13 @@ rubickcore.update('rubick-adapter-db@0.0.2')
 搜索插件
 
 ```js
-rubickcore.search(adapter)
+core.search(adapter)
 ```
 
 **eg:**
 
 ```js
-rubickcore.search('rubick-adapter-db')
+core.search('rubick-adapter-db')
 ```
 
 ##### 5. api
@@ -150,13 +150,13 @@ rubickcore.search('rubick-adapter-db')
 获取插件能力
 
 ```js
-rubickcore.api(adapter)
+core.api(adapter)
 ```
 
 **eg:**
 
 ```js
-rubickcore.api('rubick-adapter-db')
+core.api('rubick-adapter-db')
 ```
 
 ## 贡献指南
