@@ -91,14 +91,22 @@ export type PromiseReturnType<T extends () => Promise<object>> =
  * @interface AdapterInfo
  */
 export interface AdapterInfo {
-  pluginName: string
-  author: string
-  description: string
-  main: string
-  version: string
-  logo: string
+  // 插件类型
+  type: 'adapter'
+  // 插件名称 rubick-adapter-xxx
   name: string
-  features: object[]
+  // 可读插件名称
+  pluginName: string
+  // 作者
+  author: string
+  // 描述
+  description: string
+  // 入口文件
+  main: string
+  // 版本
+  version: string
+  // logo地址
+  logo: string
 }
 
 // 插件运行状态
