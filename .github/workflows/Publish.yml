@@ -1,9 +1,9 @@
 on:
   push:
-    branches:
-      - master
     tags:
       - '*'
+      branches:
+        - master
 
 name: Publish
 
