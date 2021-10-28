@@ -2,8 +2,7 @@ on:
   push:
     tags:
       - '*'
-      branches:
-        - master
+
 
 name: Publish
 
