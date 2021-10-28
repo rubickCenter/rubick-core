@@ -1,8 +1,8 @@
 {
   "name": "@rubickos/rubick-core",
   "version": "0.1.0",
-  "description": "rubick core api",
-  "author": "muwoo",
+  "description": "rubick core plugin system",
+  "author": "rubickCenter",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
