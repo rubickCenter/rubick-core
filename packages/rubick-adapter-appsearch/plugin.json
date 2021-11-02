@@ -1,0 +1,10 @@
+{
+  "name": "rubick-adapter-appsearch",
+  "pluginName": "跨平台应用搜索",
+  "type": "adapter",
+  "author": "rubickCenter",
+  "description": "跨平台应用搜索插件",
+  "main": "dist/index.js",
+  "version": "0.0.2",
+  "logo": "logo.png"
+}

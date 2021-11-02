@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 import translate from '../translate'
+import { AppPlugin } from '..'
 
 const isZhRegex = /[\u4e00-\u9fa5]/
 

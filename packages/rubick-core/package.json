@@ -1,6 +1,6 @@
 {
   "name": "@rubickos/rubick-core",
-  "version": "0.1.0",
+  "version": "0.1.0-1",
   "description": "rubick core plugin system",
   "author": "rubickCenter",
   "main": "dist/index.js",

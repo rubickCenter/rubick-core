@@ -20,7 +20,9 @@
     "lint": "cd ../.. && npm run lint"
   },
   "dependencies": {
-    "get-mac-apps": "^1.0.2"
+    "get-mac-apps": "^1.0.2",
+    "rubickbase": "^1.4.2",
+    "win-lnk-parser": "^1.1.2"
   },
   "files": [
     "dist"

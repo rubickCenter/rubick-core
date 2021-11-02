@@ -4,6 +4,7 @@ type ErrorType =
   | 'PackageManagerError'
   | 'AdapterNotFoundError'
   | 'AdapterGetAPIError'
+  | 'AdapterLoadError'
   | 'AdapterStopError'
   | 'AdapterStartError'
   | 'UnknownError'

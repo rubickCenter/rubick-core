@@ -124,11 +124,19 @@ class AdapterHandler {
       // 兼容 cjs 和 esm
       AdapterFactory = AdapterFactory.default ?? AdapterFactory
 
-      // 读取配置实例化插件对象
-      const adapterInstance: AdapterClassType = new AdapterFactory(
-        this.config.get(adapter) ?? {}
-      )
-      return await this.startAdapterInstance(adapter, adapterInstance)
+      try {
+        // 读取配置实例化插件对象
+        const adapterInstance: AdapterClassType = new AdapterFactory(
+          this.config.get(adapter) ?? {}
+        )
+
+        return await this.startAdapterInstance(adapter, adapterInstance)
+      } catch (error) {
+        throw new RubickError(
+          'AdapterLoadError',
+          `Cannot load ${adapter} as a valid rubick adapter!`
+        )
+      }
     } else {
       throw new RubickError(
         'AdapterNotFoundError',
