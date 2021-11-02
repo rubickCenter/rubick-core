@@ -48,7 +48,7 @@ export default class AppSearchAdapter {
         JSON.parse((await getInstalledApps(true, this.opt.extraDirs)) as string)
       )
     } else if (process.platform === 'win32') {
-      // win 下返回快捷方式列表
+      // win 下返回快捷方式列表 所以要再解析
       const lnkList = JSON.parse(
         (await getInstalledApps(false, this.opt.extraDirs)) as string
       )
