@@ -3,7 +3,10 @@ import linuxSearch from './search/linux'
 import winSearch from './search/win'
 import { newRubickBase, RubickBase } from 'rubickbase'
 
-type Opt = { nativeImage?: any; extraDirs?: string[] }
+interface Opt {
+  nativeImage?: any
+  extraDirs?: string[]
+}
 
 export interface AppPlugin {
   name: string
@@ -12,8 +15,8 @@ export interface AppPlugin {
 }
 
 export default class AppSearchAdapter {
-  private opt: Opt
-  private baseAPI: ReturnType<RubickBase['getBasicAPI']>
+  private readonly opt: Opt
+  private readonly base: RubickBase
   appList: AppPlugin[] = []
 
   constructor(opt: Opt) {
@@ -21,7 +24,7 @@ export default class AppSearchAdapter {
       throw new Error('nativeImage cannot be undefined!')
     }
     this.opt = opt
-    this.baseAPI = newRubickBase().getBasicAPI()
+    this.base = newRubickBase()
   }
 
   async start() {
@@ -36,7 +39,7 @@ export default class AppSearchAdapter {
   }
 
   private async updateList() {
-    const { getInstalledApps } = await this.baseAPI
+    const { getInstalledApps } = await this.base.getBasicAPI()
     if (process.platform === 'darwin') {
       this.appList = await darwinSearch(this.opt.nativeImage)
     } else if (process.platform === 'linux') {
@@ -56,5 +59,7 @@ export default class AppSearchAdapter {
     }
   }
 
-  async stop() {}
+  async stop() {
+    'ok'
+  }
 }

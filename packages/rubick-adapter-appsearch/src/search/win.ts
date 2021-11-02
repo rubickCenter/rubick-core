@@ -28,7 +28,7 @@ export default async (lnkPath: string) => {
     desc: description,
     type: 'app',
     icon: iconLocation,
-    action: `start "dummyclient" "${targetPath}"`,
+    action: `start "dummyclient" "${targetPath as string}"`,
     keyWords: keywds,
     name: lnkPath,
     names: keywds
