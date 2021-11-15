@@ -31,7 +31,7 @@ describe('AdapterHandler', () => {
   }, 30000)
 
   test('Install adapter', async () => {
-    await adapterInstance.install('rubick-adapter-db')
+    await adapterInstance.install(['rubick-adapter-db'])
     expect((await adapterInstance.list())[0]).toBe('rubick-adapter-db')
   }, 30000)
 

@@ -1,4 +1,5 @@
 import path from 'path'
+// @ts-ignore
 import fs from 'fs-extra'
 import PouchDB from 'pouchdb'
 import rocksdb from 'pouchdb-adapter-rocksdb2'
@@ -30,7 +31,7 @@ export default class Localdb<T> {
     if (!(await fs.pathExists(this.dbpath))) await fs.mkdirs(this.dbpath)
     this.pouchDB = new PouchDB(this.defaultDbName, {
       auto_compaction: true,
-      adapter: 'rocksdb'
+      // adapter: 'rocksdb'
     })
   }
 

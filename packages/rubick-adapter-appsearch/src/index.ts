@@ -1,7 +1,7 @@
 import darwinSearch from './search/darwin'
 import linuxSearch from './search/linux'
 import winSearch from './search/win'
-import { newRubickBase, RubickBase } from 'rubickbase'
+import { newRubickBase, RubickBase } from 'rubickbase/dist/index.js'
 
 interface Opt {
   nativeImage?: any
@@ -27,8 +27,8 @@ export default class AppSearchAdapter {
     this.base = newRubickBase()
   }
 
-  async start() {
-    await this.updateList()
+  start() {
+    // do something
   }
 
   async api() {
@@ -39,16 +39,19 @@ export default class AppSearchAdapter {
   }
 
   private async updateList() {
-    const { getInstalledApps } = await this.base.getBasicAPI()
     if (process.platform === 'darwin') {
       this.appList = await darwinSearch(this.opt.nativeImage)
     } else if (process.platform === 'linux') {
       // linux 的结果
+      const { getInstalledApps } = await this.base.getBasicAPI()
+
       this.appList = linuxSearch(
         JSON.parse((await getInstalledApps(true, this.opt.extraDirs)) as string)
       )
     } else if (process.platform === 'win32') {
       // win 的快捷方式列表
+      const { getInstalledApps } = await this.base.getBasicAPI()
+
       const lnkList = JSON.parse(
         (await getInstalledApps(false, this.opt.extraDirs)) as string
       )

@@ -30,7 +30,7 @@ class AdapterHandler {
   // 插件运行状态
   readonly status = new Map<string, AdapterStatus>()
   // 插件安装地址
-  readonly baseDir: string
+  public baseDir: string
   // 插件源地址
   readonly registry: string
   // 插件配置
@@ -116,15 +116,13 @@ class AdapterHandler {
       PromiseReturnType<AdapterClassType['api']>
     >
   >(adapter: string): Promise<PromiseReturnType<AdapterClassType['api']>> {
-    const adapterPath = path.resolve(this.baseDir, 'node_modules', adapter)
+    const adapterPath = path.resolve(this.baseDir, 'node_modules', adapter, 'index.js')
     if (await fs.pathExists(adapterPath)) {
       // 动态引入插件
-      let AdapterFactory = await import(adapterPath)
-
-      // 兼容 cjs 和 esm
-      AdapterFactory = AdapterFactory.default ?? AdapterFactory
-
       try {
+        let AdapterFactory = eval(fs.readFileSync(adapterPath, 'utf8'))
+        // 兼容 cjs 和 esm
+        AdapterFactory = AdapterFactory.default ?? AdapterFactory
         // 读取配置实例化插件对象
         const adapterInstance: AdapterClassType = new AdapterFactory(
           this.config.get(adapter) ?? {}
@@ -132,6 +130,7 @@ class AdapterHandler {
 
         return await this.startAdapterInstance(adapter, adapterInstance)
       } catch (error) {
+        console.log(error)
         throw new RubickError(
           'AdapterLoadError',
           `Cannot load ${adapter} as a valid rubick adapter!`
@@ -238,13 +237,13 @@ class AdapterHandler {
   }
 
   // 安装并启动插件
-  async install(...adapters: string[]) {
+  async install(adapters: Array<string>, opts?:any) {
     // 安装
     await this.execCommand('add', adapters)
     // 启动插件
     for (const name of adapters) {
       logger.info(`Adapter ${name} installed`)
-      await this.start(name)
+      opts.defaultStart && await this.start(name)
     }
   }
 
